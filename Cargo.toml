@@ -1,0 +1,18 @@
+[package]
+name = "edaxsd2rs"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = { version = "1.0.42" }
+clap = { version = "4.2.1", features = ["derive"] }
+
+xml-rs = { version = "0.8.4" }
+
+xsd-parser = {git = "https://github.com/lumeohq/xsd-parser-rs" }
+xsd-types = {git = "https://github.com/lumeohq/xsd-parser-rs" }
+xsd-macro-utils = {git = "https://github.com/lumeohq/xsd-parser-rs" }
+yaserde_derive = { version = "0.7.1" }
+yaserde = { version = "0.7.1" }

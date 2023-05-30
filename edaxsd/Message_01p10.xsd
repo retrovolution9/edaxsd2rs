@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mit XMLSpy v2019 rel. 3 (x64) (http://www.altova.com) von Vorarlberger Kraftwerke AG (Vorarlberger Kraftwerke AG) bearbeitet -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ct="http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20" xmlns:cp="http://www.ebutilities.at/schemata/customerprocesses/message/01p10" targetNamespace="http://www.ebutilities.at/schemata/customerprocesses/message/01p10" elementFormDefault="qualified">
+	<xsd:import namespace="http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20" schemaLocation="CPCommonTypes_01p20.xsd"/>
+	<xsd:annotation>
+		<xsd:documentation>
+			schema version: 01.10
+			autor: Reinhold Hansmann
+			valid from: 2020-10-01
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:element name="Message">
+		<xsd:annotation>
+			<xsd:documentation>Nachrichten</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="MarketParticipantDirectory" type="cp:MarketParticipantDirectory"/>
+				<xsd:element name="ProcessDirectory" type="cp:ProcessDirectory"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="MarketParticipantDirectory">
+		<xsd:complexContent>
+			<xsd:extension base="ct:MarketParticipantDirectory">
+				<xsd:sequence>
+					<xsd:element name="MessageCode">
+						<xsd:simpleType>
+							<xsd:restriction base="ct:MessageCode">
+								<xsd:enumeration value="SENDEN_MSG"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+				</xsd:sequence>
+				<xsd:attribute name="SchemaVersion" use="required">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:token">
+							<xsd:enumeration value="01.10"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="ProcessDirectory">
+		<xsd:complexContent>
+			<xsd:extension base="ct:ProcessDirectoryS">
+				<xsd:sequence>
+					<xsd:element name="ProcessDate" type="xsd:date"/>
+					<xsd:element name="MessageData" type="cp:MessageData"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="MessageData">
+		<xsd:annotation>
+			<xsd:documentation>Nachricht</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Subject" type="cp:SubjectType"/>
+			<xsd:element name="InfoType" type="cp:InfoTypeType"/>
+			<xsd:element name="MessageText">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="xsd:base64Binary">
+							<xsd:attribute name="Tag" type="cp:MessageTextTag" use="optional"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SubjectType">
+		<xsd:annotation>
+			<xsd:documentation>Bezugsobjekt</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="ConversationId" type="ct:GroupingId"/>
+			<xsd:element name="MeteringPoint" type="ct:MeteringPoint"/>
+			<xsd:element name="InvoiceNumber" type="cp:InvoiceNumberType"/>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:simpleType name="InfoTypeType">
+		<xsd:annotation>
+			<xsd:documentation>Prozessrolle</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="20"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="InvoiceNumberType">
+		<xsd:annotation>
+			<xsd:documentation>Netz-Rechnungsnumer</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="20"/>
+			<xsd:pattern value="[\-0-9A-Za-z_ äöüÄÖÜß@\.]+"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="MessageTextTag">
+		<xsd:annotation>
+			<xsd:documentation>Schlagwort</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="100"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mit XMLSpy v2020 rel. 2 sp1 (x64) (http://www.altova.com) von Illwerke VKW Aktiengesellschaft (illwerke vkw Aktiengesellschaft) bearbeitet -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ct="http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20" xmlns:cp="http://www.ebutilities.at/schemata/customerprocesses/cpdocument/01p13" targetNamespace="http://www.ebutilities.at/schemata/customerprocesses/cpdocument/01p13" elementFormDefault="qualified">
+	<xsd:import namespace="http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20" schemaLocation="CPCommonTypes_01p20.xsd"/>
+	<xsd:annotation>
+		<xsd:documentation>
+			schema version: 01.13
+			autor: Reinhold Hansmann
+			valid from: 2022-07-01
+			changes:
+				no enumeration for MessageCode
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:element name="CPDocument">
+		<xsd:annotation>
+			<xsd:documentation>Übermittlung eines Nachweisdokumentes</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="MarketParticipantDirectory" type="cp:MarketParticipantDirectory"/>
+				<xsd:element name="ProcessDirectory" type="cp:ProcessDirectory"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="MarketParticipantDirectory">
+		<xsd:complexContent>
+			<xsd:extension base="ct:MarketParticipantDirectory">
+				<xsd:sequence>
+					<xsd:element name="MessageCode" type="ct:MessageCode"/>
+				</xsd:sequence>
+				<xsd:attribute name="SchemaVersion" use="required">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:token">
+							<xsd:enumeration value="01.13"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="ProcessDirectory">
+		<xsd:complexContent>
+			<xsd:extension base="ct:ProcessDirectoryS">
+				<xsd:sequence>
+					<xsd:element name="VerificationDocument" type="cp:VerificationDocument"/>
+					<xsd:element name="AdditionalData" type="ct:AdditionalData" minOccurs="0" maxOccurs="1000"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="VerificationDocument">
+		<xsd:sequence>
+			<xsd:element name="DOCNumber" type="cp:DOCNumber"/>
+			<xsd:element name="DOCCategory" type="cp:DOCCategory"/>
+			<xsd:element name="DOCOwner" type="cp:DOCOwner" minOccurs="0"/>
+			<xsd:element name="DOCAuthentificationMethod" type="cp:DOCAuthentificationMethod" minOccurs="0"/>
+			<xsd:element name="DOCAuthentificationDescription" type="cp:DOCAuthentificationDescription" minOccurs="0"/>
+			<xsd:element name="DOCSignatureDate" type="cp:DOCSignatureDate" minOccurs="0"/>
+			<xsd:element name="DOCValidUntil" type="cp:DOCValidUntil" minOccurs="0"/>
+			<xsd:element name="DOCUrl" type="cp:DOCUrl" minOccurs="0"/>
+			<xsd:element name="DOCDescription" type="cp:DOCDescription" minOccurs="0"/>
+			<xsd:element name="DOCExtension" type="cp:DOCExtension" minOccurs="0"/>
+			<xsd:element name="DOCFile" type="xsd:base64Binary" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="DOCAuthentificationMethod">
+		<xsd:annotation>
+			<xsd:documentation>Authentifizierungsverfahren</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:unsignedByte"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="DOCAuthentificationDescription">
+		<xsd:annotation>
+			<xsd:documentation>Authentifizierungsverfahren bei "Sonstige"</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="120"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DOCCategory">
+		<xsd:annotation>
+			<xsd:documentation>Dokumentenkategorie</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DOCDescription">
+		<xsd:annotation>
+			<xsd:documentation>Dokumenten-Beschreibung</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="40"/>
+			<xsd:minLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DOCExtension">
+		<xsd:annotation>
+			<xsd:documentation>Dokument-File Endung</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DOCNumber">
+		<xsd:annotation>
+			<xsd:documentation>Dokumenten-ID</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="35"/>
+			<xsd:minLength value="1"/>
+			<xsd:pattern value="[0-9A-Za-z]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DOCOwner">
+		<xsd:annotation>
+			<xsd:documentation>Dokumenteneigner</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Za-z]{2}[0-9]{6}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DOCSignatureDate">
+		<xsd:annotation>
+			<xsd:documentation>Zeichnungsdatum</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:date"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="DOCUrl">
+		<xsd:annotation>
+			<xsd:documentation>Verweis auf Dokument (z.B. Ediktsdatei, Impressum…)</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="DOCValidUntil">
+		<xsd:annotation>
+			<xsd:documentation>Gültig bis</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:date"/>
+	</xsd:simpleType>
+</xsd:schema>

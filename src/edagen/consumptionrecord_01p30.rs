@@ -4,24 +4,24 @@ use std::str::FromStr;
 use xsd_parser::generator::validator::Validate;
 use xsd_types::types as xs;
 use xsd_macro_utils::{UtilsDefaultSerde,UtilsTupleIo};
-use yaserde::ser::Config;
 
 // common types
-use super::cpcommontypes_01p20 as ct;
+use super::cpcommontypes_01p20 as ns1;
 
 // for read/write functions
+use yaserde::ser::Config;
 use std::path::Path;
 use std::fs::File;
-use std::io::{BufReader, BufWriter};
+use std::io::{BufReader,BufWriter,Write};
 
 //use CPCommonTypes_01p20.xsd  http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20;
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
 pub struct ConsumptionRecord {
-    #[yaserde(prefix = "cp", rename = "MarketParticipantDirectory")]
+    #[yaserde(prefix = "ns0", rename = "MarketParticipantDirectory")]
     pub market_participant_directory: MarketParticipantDirectory,
 
-    #[yaserde(prefix = "cp", rename = "ProcessDirectory")]
+    #[yaserde(prefix = "ns0", rename = "ProcessDirectory")]
     pub process_directory: ProcessDirectory,
 }
 
@@ -29,23 +29,11 @@ impl Validate for ConsumptionRecord {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
 pub struct MarketParticipantDirectory {
     // DATEN_CRMSG
-    #[yaserde(prefix = "cp", rename = "MessageCode")]
+    #[yaserde(prefix = "ns0", rename = "MessageCode")]
     pub message_code: market_participant_directory::MessageCodeType,
-
-    #[yaserde(prefix = "ct", rename = "RoutingHeader")]
-    pub routing_header: ct::RoutingHeader,
-
-    #[yaserde(prefix = "ct", rename = "Sector")]
-    pub sector: ct::Sector,
-
-    #[yaserde(attribute, rename = "DocumentMode")]
-    pub document_mode: ct::DocumentMode,
-
-    #[yaserde(attribute, rename = "Duplicate")]
-    pub duplicate: bool,
 
     #[yaserde(attribute, rename = "SchemaVersion")]
     pub schema_version: ConsumptionRecordVersion,
@@ -57,32 +45,20 @@ pub mod market_participant_directory {
     use super::*;
     
     #[derive(Default, PartialEq, Debug, UtilsTupleIo, UtilsDefaultSerde)]
-    pub struct MessageCodeType (pub ct::MessageCode);
+    pub struct MessageCodeType (pub ns1::MessageCode);
 
     impl Validate for MessageCodeType {}
 
 }
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
 pub struct ProcessDirectory {
     // Lieferanschrift (EC-Nummer)
-    #[yaserde(prefix = "cp", rename = "DeliveryPoint")]
-    pub delivery_point: Option<ct::MessageAddress>,
+    #[yaserde(prefix = "ns0", rename = "DeliveryPoint")]
+    pub delivery_point: Option<ns1::MessageAddress>,
 
-    #[yaserde(prefix = "ct", rename = "MessageId")]
-    pub message_id: ct::GroupingId,
-
-    #[yaserde(prefix = "ct", rename = "ConversationId")]
-    pub conversation_id: ct::GroupingId,
-
-    #[yaserde(prefix = "ct", rename = "ProcessDate")]
-    pub process_date: xs::Date,
-
-    #[yaserde(prefix = "ct", rename = "MeteringPoint")]
-    pub metering_point: ct::MeteringPoint,
-
-    #[yaserde(prefix = "cp", rename = "Energy")]
+    #[yaserde(prefix = "ns0", rename = "Energy")]
     pub energy: Vec<Energy>,
 }
 
@@ -91,24 +67,24 @@ impl Validate for ProcessDirectory {}
 
 // Energie-Mengen
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
 pub struct Energy {
-    #[yaserde(prefix = "cp", rename = "MeteringReason")]
+    #[yaserde(prefix = "ns0", rename = "MeteringReason")]
     pub metering_reason: MeteringReason,
 
-    #[yaserde(prefix = "cp", rename = "MeteringPeriodStart")]
+    #[yaserde(prefix = "ns0", rename = "MeteringPeriodStart")]
     pub metering_period_start: DateTimeU,
 
-    #[yaserde(prefix = "cp", rename = "MeteringPeriodEnd")]
+    #[yaserde(prefix = "ns0", rename = "MeteringPeriodEnd")]
     pub metering_period_end: DateTimeU,
 
-    #[yaserde(prefix = "cp", rename = "MeteringIntervall")]
+    #[yaserde(prefix = "ns0", rename = "MeteringIntervall")]
     pub metering_intervall: MeteringIntervall,
 
-    #[yaserde(prefix = "cp", rename = "NumberOfMeteringIntervall")]
+    #[yaserde(prefix = "ns0", rename = "NumberOfMeteringIntervall")]
     pub number_of_metering_intervall: xs::Integer,
 
-    #[yaserde(prefix = "cp", rename = "EnergyData")]
+    #[yaserde(prefix = "ns0", rename = "EnergyData")]
     pub energy_data: Vec<EnergyData>,
 }
 
@@ -117,9 +93,9 @@ impl Validate for Energy {}
 
 // Energie-Positionen
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
 pub struct EnergyData {
-    #[yaserde(prefix = "cp", rename = "EP")]
+    #[yaserde(prefix = "ns0", rename = "EP")]
     pub ep: Vec<EnergyPosition>,
 
     // OBIS-Code
@@ -136,22 +112,22 @@ impl Validate for EnergyData {}
 
 // Energie-Position
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
 pub struct EnergyPosition {
     // Datum/Zeit von
-    #[yaserde(prefix = "cp", rename = "DTF")]
+    #[yaserde(prefix = "ns0", rename = "DTF")]
     pub dtf: DateTimeU,
 
     // Datum/Zeit bis
-    #[yaserde(prefix = "cp", rename = "DTT")]
+    #[yaserde(prefix = "ns0", rename = "DTT")]
     pub dtt: Option<DateTimeU>,
 
     // Ableseart
-    #[yaserde(prefix = "cp", rename = "MM")]
+    #[yaserde(prefix = "ns0", rename = "MM")]
     pub mm: Option<MeteringMethod>,
 
     // Menge
-    #[yaserde(prefix = "cp", rename = "BQ")]
+    #[yaserde(prefix = "ns0", rename = "BQ")]
     pub bq: BillingQuantity,
 }
 
@@ -221,7 +197,7 @@ impl Validate for Fax {
 }
 
 // Messintervall
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
 
 pub enum MeteringIntervall {
     #[yaserde(rename = "QH")]
@@ -243,7 +219,7 @@ impl Validate for MeteringIntervall {}
 
 
 // Ableseart
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
 
 pub enum MeteringMethod {
     #[yaserde(rename = "01")]
@@ -273,7 +249,7 @@ impl Validate for MeteringMethod {}
 
 
 // Ablesegrund
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
 
 pub enum MeteringReason {
     #[yaserde(rename = "00")]
@@ -349,7 +325,7 @@ impl Validate for ReferenceNumber {
     }
 }
 
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
 
 pub enum Uomtype {
     #[yaserde(rename = "PROZ")]
@@ -429,7 +405,7 @@ pub struct DateTimeU (pub xs::DateTime);
 
 impl Validate for DateTimeU {}
 // Produktiv-/Testkennzeichen
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
 
 pub enum DocumentMode {
     #[yaserde(rename = "PROD")]
@@ -520,20 +496,25 @@ pub fn read_consumptionrecord_01p30(file_read : &Path) -> Option<ConsumptionReco
   }
   None
 }
-
-
-pub fn write_consumptionrecord_01p30( file_write: &Path, data : &ConsumptionRecord ) -> Result<(),String>
+pub fn write_consumptionrecord_01p30(file_write : &Path, data :&ConsumptionRecord) -> Result<(),String>
 {
+ 
     if let Ok(src_file) = File::create(file_write) {  
-        let config: Config = Config {
-            perform_indent: true,
-            write_document_declaration: true,
-            indent_string: None,
-        };
-        match yaserde::ser::serialize_with_writer(data, BufWriter::new(src_file), &config) {
-            Ok(_) => return Ok(()),
-            Err(err) => return Err(err),
+    let config: Config = Config {
+        perform_indent: true,
+        write_document_declaration: true,
+        indent_string: None,
+    };        
+    if let Ok(mut content) = yaserde::ser::to_string_with_config(data, &config) {
+    content = content.replace("xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30","xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30xmlns:ns1=\"http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20\""); 
+        let mut bw = BufWriter::new(src_file);
+        if let Ok(_write_ok) = bw.write_all(content.as_bytes()) {
+            return Ok(());
         }
-    }
-    Err("can't create file".to_string())
+    }        
+    return Err("error serialize content".to_string());
+}
+Err("can't create file".to_string())
+
+
 }

@@ -6,21 +6,22 @@ use xsd_types::types as xs;
 use xsd_macro_utils::{UtilsDefaultSerde,UtilsTupleIo};
 
 // common types
-use super::cpcommontypes_01p20 as ct;
+use super::cpcommontypes_01p20 as ns1;
 
 // for read/write functions
+use yaserde::ser::Config;
 use std::path::Path;
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{BufReader,BufWriter,Write};
 
 //use CPCommonTypes_01p20.xsd  http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20;
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/meteringpointlist/01p20")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/meteringpointlist/01p20")]
 pub struct MeteringPointList {
-    #[yaserde(prefix = "cp", rename = "MarketParticipantDirectory")]
+    #[yaserde(prefix = "ns0", rename = "MarketParticipantDirectory")]
     pub market_participant_directory: MarketParticipantDirectory,
 
-    #[yaserde(prefix = "cp", rename = "ProcessDirectory")]
+    #[yaserde(prefix = "ns0", rename = "ProcessDirectory")]
     pub process_directory: ProcessDirectory,
 }
 
@@ -28,9 +29,9 @@ impl Validate for MeteringPointList {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/meteringpointlist/01p20")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/meteringpointlist/01p20")]
 pub struct MarketParticipantDirectory {
-    #[yaserde(prefix = "cp", rename = "MessageCode")]
+    #[yaserde(prefix = "ns0", rename = "MessageCode")]
     pub message_code: market_participant_directory::MessageCodeType,
 
     #[yaserde(attribute, rename = "SchemaVersion")]
@@ -43,37 +44,37 @@ pub mod market_participant_directory {
     use super::*;
     
     #[derive(Default, PartialEq, Debug, UtilsTupleIo, UtilsDefaultSerde)]
-    pub struct MessageCodeType (pub ct::MessageCode);
+    pub struct MessageCodeType (pub ns1::MessageCode);
 
     impl Validate for MessageCodeType {}
 
 }
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/meteringpointlist/01p20")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/meteringpointlist/01p20")]
 pub struct ProcessDirectory {
     // Nachrichtennummer
-    #[yaserde(prefix = "cp", rename = "MessageId")]
-    pub message_id: ct::GroupingId,
+    #[yaserde(prefix = "ns0", rename = "MessageId")]
+    pub message_id: ns1::GroupingId,
 
     // Prozessnummer
-    #[yaserde(prefix = "cp", rename = "ConversationId")]
-    pub conversation_id: ct::GroupingId,
+    #[yaserde(prefix = "ns0", rename = "ConversationId")]
+    pub conversation_id: ns1::GroupingId,
 
     // Prozessdatum
-    #[yaserde(prefix = "cp", rename = "ProcessDate")]
+    #[yaserde(prefix = "ns0", rename = "ProcessDate")]
     pub process_date: xs::Date,
 
     // Anzahl der (Teil)Meldungen innerhalb der gleichen ConversationId
-    #[yaserde(prefix = "cp", rename = "NumberOfMessages")]
+    #[yaserde(prefix = "ns0", rename = "NumberOfMessages")]
     pub number_of_messages: NumberOfMessages,
 
     // Nummer der Meldung innerhalb der gleichen ConversationId
-    #[yaserde(prefix = "cp", rename = "CurrentMessageNumber")]
+    #[yaserde(prefix = "ns0", rename = "CurrentMessageNumber")]
     pub current_message_number: CurrentMessageNumber,
 
     // Zählpunktsdaten
-    #[yaserde(prefix = "cp", rename = "MeteringPointListData")]
+    #[yaserde(prefix = "ns0", rename = "MeteringPointListData")]
     pub metering_point_list_data: Vec<MeteringPointListData>,
 }
 
@@ -82,30 +83,30 @@ impl Validate for ProcessDirectory {}
 
 // Daten der Zählpunkte
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/meteringpointlist/01p20")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/meteringpointlist/01p20")]
 pub struct MeteringPointListData {
     // Zählpunkt
-    #[yaserde(prefix = "cp", rename = "MeteringPoint")]
-    pub metering_point: ct::MeteringPoint,
+    #[yaserde(prefix = "ns0", rename = "MeteringPoint")]
+    pub metering_point: ns1::MeteringPoint,
 
     // Prognostizierter Jahresverbrauch
-    #[yaserde(prefix = "cp", rename = "ForecastConsumption")]
+    #[yaserde(prefix = "ns0", rename = "ForecastConsumption")]
     pub forecast_consumption: Option<ForecastConsumption>,
 
     // Lastprofiltyp
-    #[yaserde(prefix = "cp", rename = "LoadProfileType")]
+    #[yaserde(prefix = "ns0", rename = "LoadProfileType")]
     pub load_profile_type: LoadProfileType,
 
     // Typ des Zählers
-    #[yaserde(prefix = "cp", rename = "DeviceType")]
+    #[yaserde(prefix = "ns0", rename = "DeviceType")]
     pub device_type: DeviceType,
 
     // Versorgt seit
-    #[yaserde(prefix = "cp", rename = "DateFrom")]
+    #[yaserde(prefix = "ns0", rename = "DateFrom")]
     pub date_from: xs::Date,
 
     // Versorgt bis
-    #[yaserde(prefix = "cp", rename = "DateTo")]
+    #[yaserde(prefix = "ns0", rename = "DateTo")]
     pub date_to: xs::Date,
 }
 
@@ -118,7 +119,7 @@ pub struct CurrentMessageNumber (pub xs::Integer);
 
 impl Validate for CurrentMessageNumber {}
 // Zählertyp
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/meteringpointlist/01p20")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/meteringpointlist/01p20")]
 
 pub enum DeviceType {
     #[yaserde(rename = "NONSMART")]
@@ -180,4 +181,26 @@ pub fn read_meteringpointlist_01p20(file_read : &Path) -> Option<MeteringPointLi
     return Some(_data)
   }
   None
+}
+pub fn write_meteringpointlist_01p20(file_write : &Path, data :&MeteringPointList) -> Result<(),String>
+{
+ 
+    if let Ok(src_file) = File::create(file_write) {  
+    let config: Config = Config {
+        perform_indent: true,
+        write_document_declaration: true,
+        indent_string: None,
+    };        
+    if let Ok(mut content) = yaserde::ser::to_string_with_config(data, &config) {
+    content = content.replace("xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/meteringpointlist/01p20","xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/meteringpointlist/01p20xmlns:ns1=\"http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20\""); 
+        let mut bw = BufWriter::new(src_file);
+        if let Ok(_write_ok) = bw.write_all(content.as_bytes()) {
+            return Ok(());
+        }
+    }        
+    return Err("error serialize content".to_string());
+}
+Err("can't create file".to_string())
+
+
 }

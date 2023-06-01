@@ -6,8 +6,7 @@ use xsd_parser::parser::parse;
 use std::io::{prelude::*};
 
 
-pub static PREPEND_XML : &str= 
-r#"
+pub static PREPEND_XML : &str= r#"
 // for deserialize xml files
 use std::str::FromStr;
 use xsd_parser::generator::validator::Validate;
@@ -15,12 +14,35 @@ use xsd_types::types as xs;
 use xsd_macro_utils::{UtilsDefaultSerde,UtilsTupleIo};
 
 // common types
-use super::cpcommontypes_01p20 as ct;
+use super::cpcommontypes_01p20 as ns1;
 
 // for read/write functions
+use yaserde::ser::Config;
 use std::path::Path;
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{BufReader,BufWriter,Write};
+
+"#;
+
+pub static WRITE_PART_1_XML : &str= r#" 
+    if let Ok(src_file) = File::create(file_write) {  
+    let config: Config = Config {
+        perform_indent: true,
+        write_document_declaration: true,
+        indent_string: None,
+    };        
+    if let Ok(mut content) = yaserde::ser::to_string_with_config(data, &config) {
+"#;
+
+pub static WRITE_PART_2_XML : &str= r#"
+        let mut bw = BufWriter::new(src_file);
+        if let Ok(_write_ok) = bw.write_all(content.as_bytes()) {
+            return Ok(());
+        }
+    }        
+    return Err("error serialize content".to_string());
+}
+Err("can't create file".to_string())
 
 "#;
 
@@ -33,8 +55,7 @@ pub fn create_rs_from_schema(input_path: &Path, output_path: Option<&str>)
             ext = format!( ".{}", file_ext.to_string_lossy());
         }
         if let Some(file_name) = input_path.file_name() {
-            let 
-            gen = GeneratorBuilder::default().build();
+            let gen = GeneratorBuilder::default().build();
 
             println!("converting {}", file_name.to_string_lossy() );
             let function_name = file_name.to_string_lossy().replace(&ext,"").to_lowercase();
@@ -43,6 +64,9 @@ pub fn create_rs_from_schema(input_path: &Path, output_path: Option<&str>)
             if function_name.starts_with("cpcommontypes") {
                 code = PREPEND_XML.to_string() 
                     + &gen.generate_rs_file(&rs_file); 
+
+                code = code.replace("\"ct\"", "\"ns1\"");
+                code = code.replace("ct:", "ns1:");
             }
             else {
 
@@ -62,7 +86,7 @@ pub fn create_rs_from_schema(input_path: &Path, output_path: Option<&str>)
                 
                 if !struct_name.is_empty() {
                     code = PREPEND_XML.to_string() 
-                    + &gen.generate_rs_file(&rs_file) 
+                    + gen.generate_rs_file(&rs_file).as_str() 
                     + &format!("pub fn read_{}(file_read : &Path) -> Option<{}>", 
                         function_name,
                         struct_name
@@ -70,8 +94,25 @@ pub fn create_rs_from_schema(input_path: &Path, output_path: Option<&str>)
                     + &format!("{{\n  if let Ok(src_file) = File::open(file_read){{\n    let _data: {} = yaserde::de::from_reader(BufReader::new(src_file)).unwrap();\n    return Some(_data)\n  }}\n  None\n}}"
                         ,struct_name );
                     
+                    let content_path = function_name.to_lowercase().replace("_", "/");
+                    let content_search : String = r#"xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/"#.to_string() + content_path.as_str();
+                    let content_replace = content_search.clone() + r#"xmlns:ns1=\"http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20\""#;
+                    let content_replace_code = format!("    content = content.replace(\"{}\",\"{}\"); ", &content_search, content_replace);
+                    
+                    code = code + &format!("\npub fn write_{}(file_write : &Path, data :&{}) -> Result<(),String>\n{{\n", 
+                        function_name,
+                        struct_name
+                     )
+                    + WRITE_PART_1_XML
+                    + content_replace_code.as_str()
+                    + WRITE_PART_2_XML
+                    + &format!("\n}}\n");
+                    
                     // HACK
-                    // --> Generator has problems while setting um sume Struct Name -> hack this
+                    code = code.replace("\"cp\"", "\"ns0\"");
+                    code = code.replace("cp:", "ns0:");
+                    code = code.replace("ct::", "ns1::");
+                    // --> Generator has problems while setting up some Struct Name -> hack this
                     code = code.replace("MarketParticipantDirectoryMessageCodeType", "MessageCodeType");
                     code = code.replace("MeteringPointDataMeteringPointDataChoice", "MeteringPointDataChoice");
                     code = code.replace("MessageDataMessageTextType", "MessageTextType");

@@ -6,18 +6,19 @@ use xsd_types::types as xs;
 use xsd_macro_utils::{UtilsDefaultSerde,UtilsTupleIo};
 
 // common types
-use super::cpcommontypes_01p20 as ct;
+use super::cpcommontypes_01p20 as ns1;
 
 // for read/write functions
+use yaserde::ser::Config;
 use std::path::Path;
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{BufReader,BufWriter,Write};
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "ct", namespace = "ct: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
+#[yaserde(prefix = "ns1", namespace = "ns1: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
 pub struct AdditionalData {
     #[yaserde(attribute, rename = "Name")]
-    pub name: AdditionalDataName,
+    pub name: ns1::AdditionalDataName,
 }
 
 impl Validate for AdditionalData {}
@@ -25,16 +26,16 @@ impl Validate for AdditionalData {}
 
 // Marktteilnehmer-Daten
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "ct", namespace = "ct: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
+#[yaserde(prefix = "ns1", namespace = "ns1: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
 pub struct MarketParticipantDirectory {
-    #[yaserde(prefix = "ct", rename = "RoutingHeader")]
-    pub routing_header: RoutingHeader,
+    #[yaserde(prefix = "ns1", rename = "RoutingHeader")]
+    pub routing_header: ns1::RoutingHeader,
 
-    #[yaserde(prefix = "ct", rename = "Sector")]
-    pub sector: Sector,
+    #[yaserde(prefix = "ns1", rename = "Sector")]
+    pub sector: ns1::Sector,
 
     #[yaserde(attribute, rename = "DocumentMode")]
-    pub document_mode: DocumentMode,
+    pub document_mode: ns1::DocumentMode,
 
     #[yaserde(attribute, rename = "Duplicate")]
     pub duplicate: bool,
@@ -45,19 +46,19 @@ impl Validate for MarketParticipantDirectory {}
 
 // Prozessdaten
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "ct", namespace = "ct: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
+#[yaserde(prefix = "ns1", namespace = "ns1: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
 pub struct ProcessDirectory {
-    #[yaserde(prefix = "ct", rename = "MessageId")]
-    pub message_id: GroupingId,
+    #[yaserde(prefix = "ns1", rename = "MessageId")]
+    pub message_id: ns1::GroupingId,
 
-    #[yaserde(prefix = "ct", rename = "ConversationId")]
-    pub conversation_id: GroupingId,
+    #[yaserde(prefix = "ns1", rename = "ConversationId")]
+    pub conversation_id: ns1::GroupingId,
 
-    #[yaserde(prefix = "ct", rename = "ProcessDate")]
+    #[yaserde(prefix = "ns1", rename = "ProcessDate")]
     pub process_date: xs::Date,
 
-    #[yaserde(prefix = "ct", rename = "MeteringPoint")]
-    pub metering_point: MeteringPoint,
+    #[yaserde(prefix = "ns1", rename = "MeteringPoint")]
+    pub metering_point: ns1::MeteringPoint,
 }
 
 impl Validate for ProcessDirectory {}
@@ -65,13 +66,13 @@ impl Validate for ProcessDirectory {}
 
 // Prozessdaten Kurz
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "ct", namespace = "ct: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
+#[yaserde(prefix = "ns1", namespace = "ns1: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
 pub struct ProcessDirectoryS {
-    #[yaserde(prefix = "ct", rename = "MessageId")]
-    pub message_id: GroupingId,
+    #[yaserde(prefix = "ns1", rename = "MessageId")]
+    pub message_id: ns1::GroupingId,
 
-    #[yaserde(prefix = "ct", rename = "ConversationId")]
-    pub conversation_id: GroupingId,
+    #[yaserde(prefix = "ns1", rename = "ConversationId")]
+    pub conversation_id: ns1::GroupingId,
 }
 
 impl Validate for ProcessDirectoryS {}
@@ -79,13 +80,13 @@ impl Validate for ProcessDirectoryS {}
 
 // Routing-Adresse
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "ct", namespace = "ct: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
+#[yaserde(prefix = "ns1", namespace = "ns1: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
 pub struct RoutingAddress {
-    #[yaserde(prefix = "ct", rename = "MessageAddress")]
-    pub message_address: MessageAddress,
+    #[yaserde(prefix = "ns1", rename = "MessageAddress")]
+    pub message_address: ns1::MessageAddress,
 
     #[yaserde(attribute, rename = "AddressType")]
-    pub address_type: AddressType,
+    pub address_type: ns1::AddressType,
 }
 
 impl Validate for RoutingAddress {}
@@ -93,15 +94,15 @@ impl Validate for RoutingAddress {}
 
 // Routing Header
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "ct", namespace = "ct: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
+#[yaserde(prefix = "ns1", namespace = "ns1: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
 pub struct RoutingHeader {
-    #[yaserde(prefix = "ct", rename = "Sender")]
-    pub sender: RoutingAddress,
+    #[yaserde(prefix = "ns1", rename = "Sender")]
+    pub sender: ns1::RoutingAddress,
 
-    #[yaserde(prefix = "ct", rename = "Receiver")]
-    pub receiver: RoutingAddress,
+    #[yaserde(prefix = "ns1", rename = "Receiver")]
+    pub receiver: ns1::RoutingAddress,
 
-    #[yaserde(prefix = "ct", rename = "DocumentCreationDateTime")]
+    #[yaserde(prefix = "ns1", rename = "DocumentCreationDateTime")]
     pub document_creation_date_time: xs::DateTime,
 }
 
@@ -110,10 +111,10 @@ impl Validate for RoutingHeader {}
 
 // Nachweis-Dokument
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "ct", namespace = "ct: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
+#[yaserde(prefix = "ns1", namespace = "ns1: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
 pub struct VerificationDocument {
-    #[yaserde(prefix = "ct", rename = "DOCNumber")]
-    pub doc_number: Docnumber,
+    #[yaserde(prefix = "ns1", rename = "DOCNumber")]
+    pub doc_number: ns1::Docnumber,
 }
 
 impl Validate for VerificationDocument {}
@@ -152,7 +153,7 @@ impl Validate for AdditionalDataValue {
 }
 
 // Adressierungsart (ECNumber, Other)
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ct", namespace = "ct: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns1", namespace = "ns1: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
 
 pub enum AddressType {
     #[yaserde(rename = "ECNumber")]
@@ -198,7 +199,7 @@ impl Validate for Docnumber {
 }
 
 // Produktiv-/Testkennzeichen
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ct", namespace = "ct: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns1", namespace = "ns1: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
 
 pub enum DocumentMode {
     #[yaserde(rename = "PROD")]
@@ -283,7 +284,7 @@ impl Validate for MeteringPoint {
 }
 
 // Sparte
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ct", namespace = "ct: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns1", namespace = "ns1: http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20")]
 
 pub enum Sector {
     #[yaserde(rename = "01")]

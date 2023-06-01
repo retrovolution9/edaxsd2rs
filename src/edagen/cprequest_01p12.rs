@@ -6,21 +6,22 @@ use xsd_types::types as xs;
 use xsd_macro_utils::{UtilsDefaultSerde,UtilsTupleIo};
 
 // common types
-use super::cpcommontypes_01p20 as ct;
+use super::cpcommontypes_01p20 as ns1;
 
 // for read/write functions
+use yaserde::ser::Config;
 use std::path::Path;
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{BufReader,BufWriter,Write};
 
 //use CPCommonTypes_01p20.xsd  http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20;
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
 pub struct Cprequest {
-    #[yaserde(prefix = "cp", rename = "MarketParticipantDirectory")]
+    #[yaserde(prefix = "ns0", rename = "MarketParticipantDirectory")]
     pub market_participant_directory: MarketParticipantDirectory,
 
-    #[yaserde(prefix = "cp", rename = "ProcessDirectory")]
+    #[yaserde(prefix = "ns0", rename = "ProcessDirectory")]
     pub process_directory: ProcessDirectory,
 }
 
@@ -29,36 +30,36 @@ impl Validate for Cprequest {}
 
 // Request: Erweiterungen
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
 pub struct Extension {
-    #[yaserde(prefix = "cp", rename = "GridInvoiceRecipient")]
+    #[yaserde(prefix = "ns0", rename = "GridInvoiceRecipient")]
     pub grid_invoice_recipient: Option<GridInvoiceRecipient>,
 
-    #[yaserde(prefix = "cp", rename = "ConsumptionBillingCycle")]
+    #[yaserde(prefix = "ns0", rename = "ConsumptionBillingCycle")]
     pub consumption_billing_cycle: Option<ConsumptionBillingCycle>,
 
-    #[yaserde(prefix = "cp", rename = "TransmissionCycle")]
+    #[yaserde(prefix = "ns0", rename = "TransmissionCycle")]
     pub transmission_cycle: Option<TransmissionCycle>,
 
-    #[yaserde(prefix = "cp", rename = "MeteringIntervall")]
+    #[yaserde(prefix = "ns0", rename = "MeteringIntervall")]
     pub metering_intervall: Option<MeteringIntervall>,
 
-    #[yaserde(prefix = "cp", rename = "LoadProfileType")]
+    #[yaserde(prefix = "ns0", rename = "LoadProfileType")]
     pub load_profile_type: Option<LoadProfileType>,
 
-    #[yaserde(prefix = "cp", rename = "DateTimeFrom")]
-    pub date_time_from: Option<ct::DateTimeU>,
+    #[yaserde(prefix = "ns0", rename = "DateTimeFrom")]
+    pub date_time_from: Option<ns1::DateTimeU>,
 
-    #[yaserde(prefix = "cp", rename = "DateTimeTo")]
-    pub date_time_to: Option<ct::DateTimeU>,
+    #[yaserde(prefix = "ns0", rename = "DateTimeTo")]
+    pub date_time_to: Option<ns1::DateTimeU>,
 
-    #[yaserde(prefix = "cp", rename = "DisconnectionReason")]
+    #[yaserde(prefix = "ns0", rename = "DisconnectionReason")]
     pub disconnection_reason: Option<DisconnectionReason>,
 
-    #[yaserde(prefix = "cp", rename = "EmailCustomer")]
+    #[yaserde(prefix = "ns0", rename = "EmailCustomer")]
     pub email_customer: Option<Email>,
 
-    #[yaserde(prefix = "cp", rename = "AssumptionOfCosts")]
+    #[yaserde(prefix = "ns0", rename = "AssumptionOfCosts")]
     pub assumption_of_costs: bool,
 }
 
@@ -66,10 +67,10 @@ impl Validate for Extension {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
 pub struct MarketParticipantDirectory {
-    #[yaserde(prefix = "cp", rename = "MessageCode")]
-    pub message_code: ct::MessageCode,
+    #[yaserde(prefix = "ns0", rename = "MessageCode")]
+    pub message_code: ns1::MessageCode,
 
     #[yaserde(attribute, rename = "SchemaVersion")]
     pub schema_version: String,
@@ -79,23 +80,23 @@ impl Validate for MarketParticipantDirectory {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
 pub struct ProcessDirectory {
-    #[yaserde(prefix = "cp", rename = "Extension")]
+    #[yaserde(prefix = "ns0", rename = "Extension")]
     pub extension: Option<Extension>,
 
-    #[yaserde(prefix = "cp", rename = "AdditionalData")]
-    pub additional_data: Vec<ct::AdditionalData>,
+    #[yaserde(prefix = "ns0", rename = "AdditionalData")]
+    pub additional_data: Vec<ns1::AdditionalData>,
 
-    #[yaserde(prefix = "cp", rename = "VerificationDocument")]
-    pub verification_document: Option<ct::VerificationDocument>,
+    #[yaserde(prefix = "ns0", rename = "VerificationDocument")]
+    pub verification_document: Option<ns1::VerificationDocument>,
 }
 
 impl Validate for ProcessDirectory {}
 
 
 // Abrechnungszyklus
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
 
 pub enum ConsumptionBillingCycle {
     #[yaserde(rename = "01")]
@@ -124,7 +125,7 @@ impl Validate for ConsumptionBillingCycle {}
 
 
 // Messintervall
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
 
 pub enum MeteringIntervall {
     #[yaserde(rename = "QH")]
@@ -146,7 +147,7 @@ impl Validate for MeteringIntervall {}
 
 
 // Sperrgrund
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
 
 pub enum DisconnectionReason {
     #[yaserde(rename = "01")]
@@ -183,7 +184,7 @@ impl Validate for Email {
 }
 
 // Netzrechnung an
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
 
 pub enum GridInvoiceRecipient {
     #[yaserde(rename = "CUSTOMER")]
@@ -220,7 +221,7 @@ impl Validate for LoadProfileType {
 }
 
 // Übertragungsintervall Verbrauchsdaten
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
 
 pub enum TransmissionCycle {
     D,
@@ -244,4 +245,26 @@ pub fn read_cprequest_01p12(file_read : &Path) -> Option<Cprequest>{
     return Some(_data)
   }
   None
+}
+pub fn write_cprequest_01p12(file_write : &Path, data :&Cprequest) -> Result<(),String>
+{
+ 
+    if let Ok(src_file) = File::create(file_write) {  
+    let config: Config = Config {
+        perform_indent: true,
+        write_document_declaration: true,
+        indent_string: None,
+    };        
+    if let Ok(mut content) = yaserde::ser::to_string_with_config(data, &config) {
+    content = content.replace("xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12","xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12xmlns:ns1=\"http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20\""); 
+        let mut bw = BufWriter::new(src_file);
+        if let Ok(_write_ok) = bw.write_all(content.as_bytes()) {
+            return Ok(());
+        }
+    }        
+    return Err("error serialize content".to_string());
+}
+Err("can't create file".to_string())
+
+
 }

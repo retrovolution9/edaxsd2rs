@@ -4,24 +4,24 @@ use std::str::FromStr;
 use xsd_parser::generator::validator::Validate;
 use xsd_types::types as xs;
 use xsd_macro_utils::{UtilsDefaultSerde,UtilsTupleIo};
-use yaserde::ser::Config;
 
 // common types
-use super::cpcommontypes_01p20 as ct;
+use super::cpcommontypes_01p20 as ns1;
 
 // for read/write functions
+use yaserde::ser::Config;
 use std::path::Path;
 use std::fs::File;
-use std::io::{BufReader, BufWriter};
+use std::io::{BufReader,BufWriter,Write};
 
 //use CPCommonTypes_01p20.xsd  http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20;
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
 pub struct Cmrequest {
-    #[yaserde(prefix = "cp", rename = "MarketParticipantDirectory")]
+    #[yaserde(prefix = "ns0", rename = "MarketParticipantDirectory")]
     pub market_participant_directory: MarketParticipantDirectory,
 
-    #[yaserde(prefix = "cp", rename = "ProcessDirectory")]
+    #[yaserde(prefix = "ns0", rename = "ProcessDirectory")]
     pub process_directory: ProcessDirectory,
 }
 
@@ -29,11 +29,11 @@ impl Validate for Cmrequest {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
 pub struct MarketParticipantDirectory {
     // Nachricht (nicht im Schema geprüft)
-    #[yaserde(prefix = "cp", rename = "MessageCode")]
-    pub message_code: ct::MessageCode,
+    #[yaserde(prefix = "ns0", rename = "MessageCode")]
+    pub message_code: ns1::MessageCode,
 
     #[yaserde(attribute, rename = "SchemaVersion")]
     pub schema_version: String,
@@ -43,24 +43,24 @@ impl Validate for MarketParticipantDirectory {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
 pub struct ProcessDirectory {
-    #[yaserde(prefix = "cp", rename = "ProcessDate")]
+    #[yaserde(prefix = "ns0", rename = "ProcessDate")]
     pub process_date: xs::Date,
 
-    #[yaserde(prefix = "cp", rename = "MeteringPoint")]
-    pub metering_point: Option<ct::MeteringPoint>,
+    #[yaserde(prefix = "ns0", rename = "MeteringPoint")]
+    pub metering_point: Option<ns1::MeteringPoint>,
 
     // Anforderungs-ID
-    #[yaserde(prefix = "cp", rename = "CMRequestId")]
-    pub cm_request_id: ct::GroupingId,
+    #[yaserde(prefix = "ns0", rename = "CMRequestId")]
+    pub cm_request_id: ns1::GroupingId,
 
     // Zustimmungs-ID
-    #[yaserde(prefix = "cp", rename = "ConsentId")]
-    pub consent_id: Option<ct::GroupingId>,
+    #[yaserde(prefix = "ns0", rename = "ConsentId")]
+    pub consent_id: Option<ns1::GroupingId>,
 
     // Anforderungs-Details
-    #[yaserde(prefix = "cp", rename = "CMRequest")]
+    #[yaserde(prefix = "ns0", rename = "CMRequest")]
     pub cm_request: ReqType,
 }
 
@@ -68,45 +68,45 @@ impl Validate for ProcessDirectory {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
 pub struct ReqType {
     // Datentypen der Anfrage
-    #[yaserde(prefix = "cp", rename = "ReqDatType")]
+    #[yaserde(prefix = "ns0", rename = "ReqDatType")]
     pub req_dat_type: ReqDatType,
 
     // Beginndatum für Versand/Datenzugriff
-    #[yaserde(prefix = "cp", rename = "DateFrom")]
+    #[yaserde(prefix = "ns0", rename = "DateFrom")]
     pub date_from: xs::Date,
 
     // Endedatum für Versand/Datenzugriff
-    #[yaserde(prefix = "cp", rename = "DateTo")]
+    #[yaserde(prefix = "ns0", rename = "DateTo")]
     pub date_to: Option<xs::Date>,
 
     // Messintervall/Granularität
-    #[yaserde(prefix = "cp", rename = "MeteringIntervall")]
+    #[yaserde(prefix = "ns0", rename = "MeteringIntervall")]
     pub metering_intervall: Option<MeteringIntervallType>,
 
     // Übertragungsintervall
-    #[yaserde(prefix = "cp", rename = "TransmissionCycle")]
+    #[yaserde(prefix = "ns0", rename = "TransmissionCycle")]
     pub transmission_cycle: Option<TransmissionCycle>,
 
     // Energiegemeinschafts-ID
-    #[yaserde(prefix = "cp", rename = "ECID")]
-    pub ecid: Option<ct::MeteringPoint>,
+    #[yaserde(prefix = "ns0", rename = "ECID")]
+    pub ecid: Option<ns1::MeteringPoint>,
 
     // Anteil bei statischem Modell von Energiegemeinschaften in Prozent
-    #[yaserde(prefix = "cp", rename = "ECShare")]
+    #[yaserde(prefix = "ns0", rename = "ECShare")]
     pub ec_share: Option<Ecshare>,
 
     // Energierichtung
-    #[yaserde(prefix = "cp", rename = "EnergyDirection")]
+    #[yaserde(prefix = "ns0", rename = "EnergyDirection")]
     pub energy_direction: Option<EnergyDirection>,
 }
 
 impl Validate for ReqType {}
 
 
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
 
 pub enum ReqDatParamTypeChoice {
     ParamCyc(ParamCycType),
@@ -124,7 +124,7 @@ impl Validate for ReqDatParamTypeChoice {}
 
 // Anforderungsdaten
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
 pub struct ReqDatParamType {
     #[yaserde(flatten)]
     pub req_dat_param_type_choice: ReqDatParamTypeChoice,
@@ -137,10 +137,10 @@ impl Validate for ReqDatParamType {}
 
 // Parameter für Historischen Versand
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
 pub struct ParamHistType {
     // Messintervall/Granularität
-    #[yaserde(prefix = "cp", rename = "MeteringIntervall")]
+    #[yaserde(prefix = "ns0", rename = "MeteringIntervall")]
     pub metering_intervall: MeteringIntervallType,
 }
 
@@ -149,14 +149,14 @@ impl Validate for ParamHistType {}
 
 // Parameter für Zyklischen Versand
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
 pub struct ParamCycType {
     // Messintervall/Granularität
-    #[yaserde(prefix = "cp", rename = "MeteringIntervall")]
+    #[yaserde(prefix = "ns0", rename = "MeteringIntervall")]
     pub metering_intervall: MeteringIntervallType,
 
     // Übertragungsintervall
-    #[yaserde(prefix = "cp", rename = "TransmissionCycle")]
+    #[yaserde(prefix = "ns0", rename = "TransmissionCycle")]
     pub transmission_cycle: TransmissionCycle,
 }
 
@@ -180,7 +180,7 @@ impl Validate for Ecshare {
 }
 
 // Energierichtung (Erzeuger/Verbraucher)
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
 
 pub enum EnergyDirection {
     #[yaserde(rename = "CONSUMPTION")]
@@ -201,7 +201,7 @@ impl Validate for EnergyDirection {}
 
 
 // Messintervall
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
 
 pub enum MeteringIntervallType {
     #[yaserde(rename = "QH")]
@@ -239,7 +239,7 @@ impl Validate for ReqDatType {
 }
 
 // Übertragungsintervall Verbrauchsdaten
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerconsent/cmrequest/01p10")]
 
 pub enum TransmissionCycle {
     D,
@@ -265,19 +265,25 @@ pub fn read_cmrequest_01p10(file_read : &Path) -> Option<Cmrequest>{
   }
   None
 }
-
-pub fn write_cm_request_01p10( file_write: &Path, cm_equest : &Cmrequest ) -> Result<(),String>
+pub fn write_cmrequest_01p10(file_write : &Path, data :&Cmrequest) -> Result<(),String>
 {
-    if let Ok(src_file) = File::open(file_write) {  
-        let config: Config = Config {
-            perform_indent: true,
-            write_document_declaration: true,
-            indent_string: None,
-        };
-        match yaserde::ser::serialize_with_writer(cm_equest, BufWriter::new(src_file), &config) {
-            Ok(_) => return Ok(()),
-            Err(err) => return Err(err),
+ 
+    if let Ok(src_file) = File::create(file_write) {  
+    let config: Config = Config {
+        perform_indent: true,
+        write_document_declaration: true,
+        indent_string: None,
+    };        
+    if let Ok(mut content) = yaserde::ser::to_string_with_config(data, &config) {
+    content = content.replace("xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/cmrequest/01p10","xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/cmrequest/01p10xmlns:ns1=\"http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20\""); 
+        let mut bw = BufWriter::new(src_file);
+        if let Ok(_write_ok) = bw.write_all(content.as_bytes()) {
+            return Ok(());
         }
-    }
-    Err("can't create file".to_string())
+    }        
+    return Err("error serialize content".to_string());
+}
+Err("can't create file".to_string())
+
+
 }

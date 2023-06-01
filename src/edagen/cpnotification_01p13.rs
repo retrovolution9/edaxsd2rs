@@ -6,21 +6,22 @@ use xsd_types::types as xs;
 use xsd_macro_utils::{UtilsDefaultSerde,UtilsTupleIo};
 
 // common types
-use super::cpcommontypes_01p20 as ct;
+use super::cpcommontypes_01p20 as ns1;
 
 // for read/write functions
+use yaserde::ser::Config;
 use std::path::Path;
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{BufReader,BufWriter,Write};
 
 //use CPCommonTypes_01p20.xsd  http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20;
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cpnotification/01p13")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cpnotification/01p13")]
 pub struct Cpnotification {
-    #[yaserde(prefix = "cp", rename = "MarketParticipantDirectory")]
+    #[yaserde(prefix = "ns0", rename = "MarketParticipantDirectory")]
     pub market_participant_directory: MarketParticipantDirectory,
 
-    #[yaserde(prefix = "cp", rename = "ProcessDirectory")]
+    #[yaserde(prefix = "ns0", rename = "ProcessDirectory")]
     pub process_directory: ProcessDirectory,
 }
 
@@ -28,10 +29,10 @@ impl Validate for Cpnotification {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cpnotification/01p13")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cpnotification/01p13")]
 pub struct MarketParticipantDirectory {
-    #[yaserde(prefix = "cp", rename = "MessageCode")]
-    pub message_code: ct::MessageCode,
+    #[yaserde(prefix = "ns0", rename = "MessageCode")]
+    pub message_code: ns1::MessageCode,
 
     #[yaserde(attribute, rename = "SchemaVersion")]
     pub schema_version: String,
@@ -41,13 +42,13 @@ impl Validate for MarketParticipantDirectory {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cpnotification/01p13")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cpnotification/01p13")]
 pub struct ProcessDirectory {
-    #[yaserde(prefix = "cp", rename = "ResponseData")]
+    #[yaserde(prefix = "ns0", rename = "ResponseData")]
     pub response_data: ResponseData,
 
-    #[yaserde(prefix = "cp", rename = "AdditionalData")]
-    pub additional_data: Vec<ct::AdditionalData>,
+    #[yaserde(prefix = "ns0", rename = "AdditionalData")]
+    pub additional_data: Vec<ns1::AdditionalData>,
 }
 
 impl Validate for ProcessDirectory {}
@@ -55,12 +56,12 @@ impl Validate for ProcessDirectory {}
 
 // Fehlermeldungsdaten
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cpnotification/01p13")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cpnotification/01p13")]
 pub struct ResponseData {
-    #[yaserde(prefix = "cp", rename = "OriginalMessageID")]
-    pub original_message_id: ct::GroupingId,
+    #[yaserde(prefix = "ns0", rename = "OriginalMessageID")]
+    pub original_message_id: ns1::GroupingId,
 
-    #[yaserde(prefix = "cp", rename = "ResponseCode")]
+    #[yaserde(prefix = "ns0", rename = "ResponseCode")]
     pub response_code: Vec<ResponseCode>,
 }
 
@@ -89,4 +90,26 @@ pub fn read_cpnotification_01p13(file_read : &Path) -> Option<Cpnotification>{
     return Some(_data)
   }
   None
+}
+pub fn write_cpnotification_01p13(file_write : &Path, data :&Cpnotification) -> Result<(),String>
+{
+ 
+    if let Ok(src_file) = File::create(file_write) {  
+    let config: Config = Config {
+        perform_indent: true,
+        write_document_declaration: true,
+        indent_string: None,
+    };        
+    if let Ok(mut content) = yaserde::ser::to_string_with_config(data, &config) {
+    content = content.replace("xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/cpnotification/01p13","xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/cpnotification/01p13xmlns:ns1=\"http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20\""); 
+        let mut bw = BufWriter::new(src_file);
+        if let Ok(_write_ok) = bw.write_all(content.as_bytes()) {
+            return Ok(());
+        }
+    }        
+    return Err("error serialize content".to_string());
+}
+Err("can't create file".to_string())
+
+
 }

@@ -6,7 +6,9 @@ use xsd_parser::generator::builder::GeneratorBuilder;
 use xsd_parser::parser::parse;
 use std::io::{prelude::*};
 
-use super::eda_info::{EdaRecordTyp,get_eda_info};
+use crate::eda_info;
+
+use super::eda_info::{EdaRecordTyp,get_eda_info, test_readwrite};
 use super::eda_convert::create_rs_from_schema;
 
 // 
@@ -154,4 +156,18 @@ pub fn print_eda_identity( edatyp: &EdaRecordTyp, file_path: &Path)
 
     println!( "found: {}", typ);
     println!( "info: {}", info);
+}
+
+
+
+// 
+// Rename EDA xml files
+//
+pub fn test_readwrite_eda_file(file_path:&Path)
+{
+  let edatyp = match identify_eda_xml(&file_path) {
+      Ok(edatype) => edatype,
+      Err(e) => return,
+  };
+  eda_info::test_readwrite(&edatyp, &file_path);
 }

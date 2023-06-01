@@ -6,21 +6,22 @@ use xsd_types::types as xs;
 use xsd_macro_utils::{UtilsDefaultSerde,UtilsTupleIo};
 
 // common types
-use super::cpcommontypes_01p20 as ct;
+use super::cpcommontypes_01p20 as ns1;
 
 // for read/write functions
+use yaserde::ser::Config;
 use std::path::Path;
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{BufReader,BufWriter,Write};
 
 //use CPCommonTypes_01p20.xsd  http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20;
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cpdocument/01p12")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cpdocument/01p12")]
 pub struct Cpdocument {
-    #[yaserde(prefix = "cp", rename = "MarketParticipantDirectory")]
+    #[yaserde(prefix = "ns0", rename = "MarketParticipantDirectory")]
     pub market_participant_directory: MarketParticipantDirectory,
 
-    #[yaserde(prefix = "cp", rename = "ProcessDirectory")]
+    #[yaserde(prefix = "ns0", rename = "ProcessDirectory")]
     pub process_directory: ProcessDirectory,
 }
 
@@ -28,9 +29,9 @@ impl Validate for Cpdocument {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cpdocument/01p12")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cpdocument/01p12")]
 pub struct MarketParticipantDirectory {
-    #[yaserde(prefix = "cp", rename = "MessageCode")]
+    #[yaserde(prefix = "ns0", rename = "MessageCode")]
     pub message_code: market_participant_directory::MessageCodeType,
 
     #[yaserde(attribute, rename = "SchemaVersion")]
@@ -43,59 +44,59 @@ pub mod market_participant_directory {
     use super::*;
     
     #[derive(Default, PartialEq, Debug, UtilsTupleIo, UtilsDefaultSerde)]
-    pub struct MessageCodeType (pub ct::MessageCode);
+    pub struct MessageCodeType (pub ns1::MessageCode);
 
     impl Validate for MessageCodeType {}
 
 }
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cpdocument/01p12")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cpdocument/01p12")]
 pub struct ProcessDirectory {
-    #[yaserde(prefix = "cp", rename = "VerificationDocument")]
+    #[yaserde(prefix = "ns0", rename = "VerificationDocument")]
     pub verification_document: VerificationDocument,
 
-    #[yaserde(prefix = "cp", rename = "AdditionalData")]
-    pub additional_data: Vec<ct::AdditionalData>,
+    #[yaserde(prefix = "ns0", rename = "AdditionalData")]
+    pub additional_data: Vec<ns1::AdditionalData>,
 }
 
 impl Validate for ProcessDirectory {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/cpdocument/01p12")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cpdocument/01p12")]
 pub struct VerificationDocument {
-    #[yaserde(prefix = "cp", rename = "DOCNumber")]
+    #[yaserde(prefix = "ns0", rename = "DOCNumber")]
     pub doc_number: Docnumber,
 
-    #[yaserde(prefix = "cp", rename = "DOCCategory")]
+    #[yaserde(prefix = "ns0", rename = "DOCCategory")]
     pub doc_category: Doccategory,
 
-    #[yaserde(prefix = "cp", rename = "DOCOwner")]
+    #[yaserde(prefix = "ns0", rename = "DOCOwner")]
     pub doc_owner: Option<Docowner>,
 
-    #[yaserde(prefix = "cp", rename = "DOCAuthentificationMethod")]
+    #[yaserde(prefix = "ns0", rename = "DOCAuthentificationMethod")]
     pub doc_authentification_method: Option<DocauthentificationMethod>,
 
-    #[yaserde(prefix = "cp", rename = "DOCAuthentificationDescription")]
+    #[yaserde(prefix = "ns0", rename = "DOCAuthentificationDescription")]
     pub doc_authentification_description: Option<DocauthentificationDescription>,
 
-    #[yaserde(prefix = "cp", rename = "DOCSignatureDate")]
+    #[yaserde(prefix = "ns0", rename = "DOCSignatureDate")]
     pub doc_signature_date: Option<DocsignatureDate>,
 
-    #[yaserde(prefix = "cp", rename = "DOCValidUntil")]
+    #[yaserde(prefix = "ns0", rename = "DOCValidUntil")]
     pub doc_valid_until: Option<DocvalidUntil>,
 
-    #[yaserde(prefix = "cp", rename = "DOCUrl")]
+    #[yaserde(prefix = "ns0", rename = "DOCUrl")]
     pub doc_url: Option<Docurl>,
 
-    #[yaserde(prefix = "cp", rename = "DOCDescription")]
+    #[yaserde(prefix = "ns0", rename = "DOCDescription")]
     pub doc_description: Option<Docdescription>,
 
-    #[yaserde(prefix = "cp", rename = "DOCExtension")]
+    #[yaserde(prefix = "ns0", rename = "DOCExtension")]
     pub doc_extension: Option<Docextension>,
 
-    #[yaserde(prefix = "cp", rename = "DOCFile")]
+    #[yaserde(prefix = "ns0", rename = "DOCFile")]
     pub doc_file: Option<String>,
 }
 
@@ -204,4 +205,26 @@ pub fn read_cpdocument_01p12(file_read : &Path) -> Option<Cpdocument>{
     return Some(_data)
   }
   None
+}
+pub fn write_cpdocument_01p12(file_write : &Path, data :&Cpdocument) -> Result<(),String>
+{
+ 
+    if let Ok(src_file) = File::create(file_write) {  
+    let config: Config = Config {
+        perform_indent: true,
+        write_document_declaration: true,
+        indent_string: None,
+    };        
+    if let Ok(mut content) = yaserde::ser::to_string_with_config(data, &config) {
+    content = content.replace("xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/cpdocument/01p12","xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/cpdocument/01p12xmlns:ns1=\"http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20\""); 
+        let mut bw = BufWriter::new(src_file);
+        if let Ok(_write_ok) = bw.write_all(content.as_bytes()) {
+            return Ok(());
+        }
+    }        
+    return Err("error serialize content".to_string());
+}
+Err("can't create file".to_string())
+
+
 }

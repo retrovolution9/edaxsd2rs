@@ -5,11 +5,11 @@ use std::fs::{self};
 use std::path::{Path, PathBuf};
 
 mod eda;
-use eda::{identify_eda_xml, rename_eda_file, print_eda_identity};
+use eda::{identify_eda_xml, rename_eda_file, print_eda_identity, test_readwrite_eda_file};
 
 mod edagen;
-mod eda_convert;
 mod eda_info;
+mod eda_convert;
 use eda_convert::create_rs_from_schema;
 
 #[macro_use]
@@ -19,6 +19,7 @@ enum EMode {
     CONVERT,
     RENAME,
     IDENTIFY,
+    TESTREADWRITE,
 }
 
 fn main() {
@@ -49,6 +50,14 @@ fn main() {
         .help("identify eda xml file(s)")
     )
     .arg(
+        Arg::new("test")
+        .long("test")
+        .short('t')
+        .required(false)
+        .action(ArgAction::SetTrue)
+        .help("test readwrite eda xml file(s)")
+    )
+    .arg(
         Arg::new("folder")
         .long("folder")
         .short('o')
@@ -73,18 +82,15 @@ fn main() {
 
     let mut cmd_v : Vec<EMode> = vec![];
     
-    let convert  = m.get_one::<bool>("convert");
-    if convert.is_some(){
+    if *m.get_one::<bool>("convert").unwrap() {
         cmd_v.push(EMode::CONVERT)
     }
 
-    let analyse  = m.get_one::<bool>("rename");
-    if analyse.is_some(){
+    if *m.get_one::<bool>("rename").unwrap() {
         cmd_v.push(EMode::RENAME)
     }
     
-    let identify = m.get_one::<bool>("identify");
-    if identify.is_some(){
+    if *m.get_one::<bool>("identify").unwrap() {
         cmd_v.push(EMode::IDENTIFY)
     }
     
@@ -148,9 +154,18 @@ fn process_single_file(mode: &EMode, input_path: &Path, output_path: Option<&str
             },
             EMode::IDENTIFY => {
                 if ext == "xml" {
-                    print_eda_identity( &identify_eda_xml(&input_path).unwrap_or(EdaRecordTyp::Invalid), &input_path);
+                    println!("identify {}", input_path.as_os_str().to_string_lossy());
+                    let ident = &identify_eda_xml(&input_path).unwrap_or(EdaRecordTyp::Invalid);    
+                    print_eda_identity( ident, &input_path);
                }
-            }
+            },
+            EMode::TESTREADWRITE => {  
+                // convert only xsd files 
+                if ext == "xsd" {
+                    println!("test_readwrite {}", input_path.as_os_str().to_string_lossy());
+                    test_readwrite_eda_file(&input_path);
+                }
+            },
         }
     }
     Ok(())

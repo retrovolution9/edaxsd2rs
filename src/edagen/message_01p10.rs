@@ -6,21 +6,22 @@ use xsd_types::types as xs;
 use xsd_macro_utils::{UtilsDefaultSerde,UtilsTupleIo};
 
 // common types
-use super::cpcommontypes_01p20 as ct;
+use super::cpcommontypes_01p20 as ns1;
 
 // for read/write functions
+use yaserde::ser::Config;
 use std::path::Path;
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{BufReader,BufWriter,Write};
 
 //use CPCommonTypes_01p20.xsd  http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20;
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/message/01p10")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/message/01p10")]
 pub struct Message {
-    #[yaserde(prefix = "cp", rename = "MarketParticipantDirectory")]
+    #[yaserde(prefix = "ns0", rename = "MarketParticipantDirectory")]
     pub market_participant_directory: MarketParticipantDirectory,
 
-    #[yaserde(prefix = "cp", rename = "ProcessDirectory")]
+    #[yaserde(prefix = "ns0", rename = "ProcessDirectory")]
     pub process_directory: ProcessDirectory,
 }
 
@@ -28,9 +29,9 @@ impl Validate for Message {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/message/01p10")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/message/01p10")]
 pub struct MarketParticipantDirectory {
-    #[yaserde(prefix = "cp", rename = "MessageCode")]
+    #[yaserde(prefix = "ns0", rename = "MessageCode")]
     pub message_code: market_participant_directory::MessageCodeType,
 
     #[yaserde(attribute, rename = "SchemaVersion")]
@@ -43,19 +44,19 @@ pub mod market_participant_directory {
     use super::*;
     
     #[derive(Default, PartialEq, Debug, UtilsTupleIo, UtilsDefaultSerde)]
-    pub struct MessageCodeType (pub ct::MessageCode);
+    pub struct MessageCodeType (pub ns1::MessageCode);
 
     impl Validate for MessageCodeType {}
 
 }
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/message/01p10")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/message/01p10")]
 pub struct ProcessDirectory {
-    #[yaserde(prefix = "cp", rename = "ProcessDate")]
+    #[yaserde(prefix = "ns0", rename = "ProcessDate")]
     pub process_date: xs::Date,
 
-    #[yaserde(prefix = "cp", rename = "MessageData")]
+    #[yaserde(prefix = "ns0", rename = "MessageData")]
     pub message_data: MessageData,
 }
 
@@ -64,15 +65,15 @@ impl Validate for ProcessDirectory {}
 
 // Nachricht
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/message/01p10")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/message/01p10")]
 pub struct MessageData {
-    #[yaserde(prefix = "cp", rename = "Subject")]
+    #[yaserde(prefix = "ns0", rename = "Subject")]
     pub subject: SubjectType,
 
-    #[yaserde(prefix = "cp", rename = "InfoType")]
+    #[yaserde(prefix = "ns0", rename = "InfoType")]
     pub info_type: InfoTypeType,
 
-    #[yaserde(prefix = "cp", rename = "MessageText")]
+    #[yaserde(prefix = "ns0", rename = "MessageText")]
     pub message_text: message_data::MessageTextType,
 }
 
@@ -82,7 +83,7 @@ pub mod message_data {
     use super::*;
     
     #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-    #[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/message/01p10")]
+    #[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/message/01p10")]
     pub struct MessageTextType {
         #[yaserde(attribute, rename = "Tag")]
         pub tag: Option<MessageTextTag>,
@@ -92,11 +93,11 @@ pub mod message_data {
 
 }
 
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/message/01p10")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/message/01p10")]
 
 pub enum SubjectTypeChoice {
-    ConversationId(ct::GroupingId),
-    MeteringPoint(ct::MeteringPoint),
+    ConversationId(ns1::GroupingId),
+    MeteringPoint(ns1::MeteringPoint),
     InvoiceNumber(InvoiceNumberType),
     __Unknown__(String),
 }
@@ -111,7 +112,7 @@ impl Validate for SubjectTypeChoice {}
 
 // Bezugsobjekt
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/message/01p10")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/message/01p10")]
 pub struct SubjectType {
     #[yaserde(flatten)]
     pub subject_type_choice: SubjectTypeChoice,
@@ -167,4 +168,26 @@ pub fn read_message_01p10(file_read : &Path) -> Option<Message>{
     return Some(_data)
   }
   None
+}
+pub fn write_message_01p10(file_write : &Path, data :&Message) -> Result<(),String>
+{
+ 
+    if let Ok(src_file) = File::create(file_write) {  
+    let config: Config = Config {
+        perform_indent: true,
+        write_document_declaration: true,
+        indent_string: None,
+    };        
+    if let Ok(mut content) = yaserde::ser::to_string_with_config(data, &config) {
+    content = content.replace("xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/message/01p10","xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/message/01p10xmlns:ns1=\"http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20\""); 
+        let mut bw = BufWriter::new(src_file);
+        if let Ok(_write_ok) = bw.write_all(content.as_bytes()) {
+            return Ok(());
+        }
+    }        
+    return Err("error serialize content".to_string());
+}
+Err("can't create file".to_string())
+
+
 }

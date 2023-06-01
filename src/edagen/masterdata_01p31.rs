@@ -6,21 +6,22 @@ use xsd_types::types as xs;
 use xsd_macro_utils::{UtilsDefaultSerde,UtilsTupleIo};
 
 // common types
-use super::cpcommontypes_01p20 as ct;
+use super::cpcommontypes_01p20 as ns1;
 
 // for read/write functions
+use yaserde::ser::Config;
 use std::path::Path;
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{BufReader,BufWriter,Write};
 
 //use CPCommonTypes_01p20.xsd  http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20;
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct MasterData {
-    #[yaserde(prefix = "cp", rename = "MarketParticipantDirectory")]
+    #[yaserde(prefix = "ns0", rename = "MarketParticipantDirectory")]
     pub market_participant_directory: MarketParticipantDirectory,
 
-    #[yaserde(prefix = "cp", rename = "ProcessDirectory")]
+    #[yaserde(prefix = "ns0", rename = "ProcessDirectory")]
     pub process_directory: ProcessDirectory,
 }
 
@@ -28,10 +29,10 @@ impl Validate for MasterData {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct MarketParticipantDirectory {
-    #[yaserde(prefix = "cp", rename = "MessageCode")]
-    pub message_code: ct::MessageCode,
+    #[yaserde(prefix = "ns0", rename = "MessageCode")]
+    pub message_code: ns1::MessageCode,
 
     #[yaserde(attribute, rename = "SchemaVersion")]
     pub schema_version: String,
@@ -41,28 +42,28 @@ impl Validate for MarketParticipantDirectory {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct ProcessDirectory {
-    #[yaserde(prefix = "cp", rename = "ContractPartner")]
+    #[yaserde(prefix = "ns0", rename = "ContractPartner")]
     pub contract_partner: Option<ContractPartner>,
 
-    #[yaserde(prefix = "cp", rename = "DeliveryAddress")]
+    #[yaserde(prefix = "ns0", rename = "DeliveryAddress")]
     pub delivery_address: Option<DeliveryAddress>,
 
-    #[yaserde(prefix = "cp", rename = "BillingData")]
+    #[yaserde(prefix = "ns0", rename = "BillingData")]
     pub billing_data: Option<BillingData>,
 
-    #[yaserde(prefix = "cp", rename = "MeteringPointData")]
+    #[yaserde(prefix = "ns0", rename = "MeteringPointData")]
     pub metering_point_data: Option<MeteringPointData>,
 
-    #[yaserde(prefix = "cp", rename = "InvoiceRecipient")]
+    #[yaserde(prefix = "ns0", rename = "InvoiceRecipient")]
     pub invoice_recipient: Option<InvoiceRecipient>,
 
-    #[yaserde(prefix = "cp", rename = "AdditionalData")]
-    pub additional_data: Vec<ct::AdditionalData>,
+    #[yaserde(prefix = "ns0", rename = "AdditionalData")]
+    pub additional_data: Vec<ns1::AdditionalData>,
 
-    #[yaserde(prefix = "cp", rename = "VerificationDocument")]
-    pub verification_document: Option<ct::VerificationDocument>,
+    #[yaserde(prefix = "ns0", rename = "VerificationDocument")]
+    pub verification_document: Option<ns1::VerificationDocument>,
 }
 
 impl Validate for ProcessDirectory {}
@@ -70,30 +71,30 @@ impl Validate for ProcessDirectory {}
 
 // Adresse
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct Address {
-    #[yaserde(prefix = "cp", rename = "ZIP")]
+    #[yaserde(prefix = "ns0", rename = "ZIP")]
     pub zip: Zipc,
 
-    #[yaserde(prefix = "cp", rename = "City")]
+    #[yaserde(prefix = "ns0", rename = "City")]
     pub city: CityC,
 
-    #[yaserde(prefix = "cp", rename = "POBoxNo")]
+    #[yaserde(prefix = "ns0", rename = "POBoxNo")]
     pub po_box_no: Option<PoboxNoC>,
 
-    #[yaserde(prefix = "cp", rename = "Street")]
+    #[yaserde(prefix = "ns0", rename = "Street")]
     pub street: Option<StreetC>,
 
-    #[yaserde(prefix = "cp", rename = "StreetNo")]
+    #[yaserde(prefix = "ns0", rename = "StreetNo")]
     pub street_no: Option<StreetNoC>,
 
-    #[yaserde(prefix = "cp", rename = "Staircase")]
+    #[yaserde(prefix = "ns0", rename = "Staircase")]
     pub staircase: Option<StaircaseC>,
 
-    #[yaserde(prefix = "cp", rename = "Floor")]
+    #[yaserde(prefix = "ns0", rename = "Floor")]
     pub floor: Option<FloorC>,
 
-    #[yaserde(prefix = "cp", rename = "DoorNumber")]
+    #[yaserde(prefix = "ns0", rename = "DoorNumber")]
     pub door_number: Option<DoorNumberC>,
 }
 
@@ -102,27 +103,27 @@ impl Validate for Address {}
 
 // Abrechnungsdaten
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct BillingData {
-    #[yaserde(prefix = "cp", rename = "ReferenceNumber")]
+    #[yaserde(prefix = "ns0", rename = "ReferenceNumber")]
     pub reference_number: Option<ReferenceNumber>,
 
-    #[yaserde(prefix = "cp", rename = "GridInvoiceRecipient")]
+    #[yaserde(prefix = "ns0", rename = "GridInvoiceRecipient")]
     pub grid_invoice_recipient: GridInvoiceRecipientC,
 
-    #[yaserde(prefix = "cp", rename = "BudgetBillingCycle")]
+    #[yaserde(prefix = "ns0", rename = "BudgetBillingCycle")]
     pub budget_billing_cycle: Option<BudgetBillingCycleC>,
 
-    #[yaserde(prefix = "cp", rename = "MeterReadingMonth")]
+    #[yaserde(prefix = "ns0", rename = "MeterReadingMonth")]
     pub meter_reading_month: Option<Months0C>,
 
-    #[yaserde(prefix = "cp", rename = "ConsumptionBillingCycle")]
+    #[yaserde(prefix = "ns0", rename = "ConsumptionBillingCycle")]
     pub consumption_billing_cycle: Option<ConsumptionBillingCycleC>,
 
-    #[yaserde(prefix = "cp", rename = "ConsumptionBillingMonth")]
+    #[yaserde(prefix = "ns0", rename = "ConsumptionBillingMonth")]
     pub consumption_billing_month: Option<Months0C>,
 
-    #[yaserde(prefix = "cp", rename = "YearMonthOfNextBill")]
+    #[yaserde(prefix = "ns0", rename = "YearMonthOfNextBill")]
     pub year_month_of_next_bill: Option<YearMonth>,
 }
 
@@ -130,7 +131,7 @@ impl Validate for BillingData {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct BudgetBillingCycleC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -140,7 +141,7 @@ impl Validate for BudgetBillingCycleC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct CityC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -150,7 +151,7 @@ impl Validate for CityC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct ConsumptionBillingCycleC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -161,39 +162,39 @@ impl Validate for ConsumptionBillingCycleC {}
 
 // Kundendaten
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct ContractPartner {
-    #[yaserde(prefix = "cp", rename = "Salutation")]
+    #[yaserde(prefix = "ns0", rename = "Salutation")]
     pub salutation: Option<Salutation>,
 
-    #[yaserde(prefix = "cp", rename = "Name1")]
+    #[yaserde(prefix = "ns0", rename = "Name1")]
     pub name_1: NameC,
 
-    #[yaserde(prefix = "cp", rename = "Name2")]
+    #[yaserde(prefix = "ns0", rename = "Name2")]
     pub name_2: Option<NameC>,
 
-    #[yaserde(prefix = "cp", rename = "Name3")]
+    #[yaserde(prefix = "ns0", rename = "Name3")]
     pub name_3: Option<NameC>,
 
-    #[yaserde(prefix = "cp", rename = "Name4")]
+    #[yaserde(prefix = "ns0", rename = "Name4")]
     pub name_4: Option<NameC>,
 
-    #[yaserde(prefix = "cp", rename = "ContractPartnerNumber")]
+    #[yaserde(prefix = "ns0", rename = "ContractPartnerNumber")]
     pub contract_partner_number: Option<ContractPartnerNumber>,
 
-    #[yaserde(prefix = "cp", rename = "DateOfBirth")]
+    #[yaserde(prefix = "ns0", rename = "DateOfBirth")]
     pub date_of_birth: Option<xs::Date>,
 
-    #[yaserde(prefix = "cp", rename = "DateOfDeath")]
+    #[yaserde(prefix = "ns0", rename = "DateOfDeath")]
     pub date_of_death: Option<xs::Date>,
 
-    #[yaserde(prefix = "cp", rename = "CompanyRegistryNo")]
+    #[yaserde(prefix = "ns0", rename = "CompanyRegistryNo")]
     pub company_registry_no: Option<CompanyRegistryNo>,
 
-    #[yaserde(prefix = "cp", rename = "VATNumber")]
+    #[yaserde(prefix = "ns0", rename = "VATNumber")]
     pub vat_number: Option<Vatnumber>,
 
-    #[yaserde(prefix = "cp", rename = "Email")]
+    #[yaserde(prefix = "ns0", rename = "Email")]
     pub email: Option<Email>,
 }
 
@@ -202,30 +203,30 @@ impl Validate for ContractPartner {}
 
 // Lieferadresse
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct DeliveryAddress {
-    #[yaserde(prefix = "cp", rename = "ZIP")]
+    #[yaserde(prefix = "ns0", rename = "ZIP")]
     pub zip: Zipc,
 
-    #[yaserde(prefix = "cp", rename = "City")]
+    #[yaserde(prefix = "ns0", rename = "City")]
     pub city: CityC,
 
-    #[yaserde(prefix = "cp", rename = "Street")]
+    #[yaserde(prefix = "ns0", rename = "Street")]
     pub street: StreetC,
 
-    #[yaserde(prefix = "cp", rename = "StreetNo")]
+    #[yaserde(prefix = "ns0", rename = "StreetNo")]
     pub street_no: StreetNoC,
 
-    #[yaserde(prefix = "cp", rename = "Staircase")]
+    #[yaserde(prefix = "ns0", rename = "Staircase")]
     pub staircase: Option<StaircaseC>,
 
-    #[yaserde(prefix = "cp", rename = "Floor")]
+    #[yaserde(prefix = "ns0", rename = "Floor")]
     pub floor: Option<FloorC>,
 
-    #[yaserde(prefix = "cp", rename = "DoorNumber")]
+    #[yaserde(prefix = "ns0", rename = "DoorNumber")]
     pub door_number: Option<DoorNumberC>,
 
-    #[yaserde(prefix = "cp", rename = "DeliveryAddressData")]
+    #[yaserde(prefix = "ns0", rename = "DeliveryAddressData")]
     pub delivery_address_data: Option<DeliveryAddressDataC>,
 }
 
@@ -233,7 +234,7 @@ impl Validate for DeliveryAddress {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct DeliveryAddressDataC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -244,12 +245,12 @@ impl Validate for DeliveryAddressDataC {}
 
 // Gerät
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct Device {
-    #[yaserde(prefix = "cp", rename = "DeviceNumber")]
+    #[yaserde(prefix = "ns0", rename = "DeviceNumber")]
     pub device_number: DeviceNumberC,
 
-    #[yaserde(prefix = "cp", rename = "MeterCode")]
+    #[yaserde(prefix = "ns0", rename = "MeterCode")]
     pub meter_code: Vec<MeterCode>,
 }
 
@@ -257,7 +258,7 @@ impl Validate for Device {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct DeviceNumberC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -267,7 +268,7 @@ impl Validate for DeviceNumberC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct DeviceTypeC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -277,7 +278,7 @@ impl Validate for DeviceTypeC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct DoorNumberC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -287,7 +288,7 @@ impl Validate for DoorNumberC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct ElectricityGridLevelC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -298,12 +299,12 @@ impl Validate for ElectricityGridLevelC {}
 
 // stromspezifische ZP-Daten
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct ElectricitySpecificData {
-    #[yaserde(prefix = "cp", rename = "GridUsageLevel")]
+    #[yaserde(prefix = "ns0", rename = "GridUsageLevel")]
     pub grid_usage_level: ElectricityGridLevelC,
 
-    #[yaserde(prefix = "cp", rename = "GridLossLevel")]
+    #[yaserde(prefix = "ns0", rename = "GridLossLevel")]
     pub grid_loss_level: ElectricityGridLevelC,
 }
 
@@ -311,7 +312,7 @@ impl Validate for ElectricitySpecificData {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct FloorC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -321,7 +322,7 @@ impl Validate for FloorC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct GasGridLevelC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -332,12 +333,12 @@ impl Validate for GasGridLevelC {}
 
 // gasspezifische ZP-Daten
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct GasSpecificData {
-    #[yaserde(prefix = "cp", rename = "PeakPower")]
+    #[yaserde(prefix = "ns0", rename = "PeakPower")]
     pub peak_power: PeakPowerC,
 
-    #[yaserde(prefix = "cp", rename = "GridUsageLevel")]
+    #[yaserde(prefix = "ns0", rename = "GridUsageLevel")]
     pub grid_usage_level: GasGridLevelC,
 }
 
@@ -345,7 +346,7 @@ impl Validate for GasSpecificData {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct GridInvoiceRecipientC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -356,12 +357,12 @@ impl Validate for GridInvoiceRecipientC {}
 
 // Rechnungsempfänger
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct InvoiceRecipient {
-    #[yaserde(prefix = "cp", rename = "PartnerData")]
+    #[yaserde(prefix = "ns0", rename = "PartnerData")]
     pub partner_data: ContractPartner,
 
-    #[yaserde(prefix = "cp", rename = "AddressData")]
+    #[yaserde(prefix = "ns0", rename = "AddressData")]
     pub address_data: Address,
 }
 
@@ -369,7 +370,7 @@ impl Validate for InvoiceRecipient {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct LoadProfileTypeC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -380,45 +381,45 @@ impl Validate for LoadProfileTypeC {}
 
 // ZP-Daten
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct MeteringPointData {
-    #[yaserde(prefix = "cp", rename = "DeviceType")]
+    #[yaserde(prefix = "ns0", rename = "DeviceType")]
     pub device_type: DeviceTypeC,
 
-    #[yaserde(prefix = "cp", rename = "TransmissionCycle")]
+    #[yaserde(prefix = "ns0", rename = "TransmissionCycle")]
     pub transmission_cycle: Option<TransmissionCycleC>,
 
-    #[yaserde(prefix = "cp", rename = "Device")]
+    #[yaserde(prefix = "ns0", rename = "Device")]
     pub device: Vec<Device>,
 
-    #[yaserde(prefix = "cp", rename = "SupStatus")]
+    #[yaserde(prefix = "ns0", rename = "SupStatus")]
     pub sup_status: SupStatus,
 
-    #[yaserde(prefix = "cp", rename = "DSOTariffClass")]
+    #[yaserde(prefix = "ns0", rename = "DSOTariffClass")]
     pub dso_tariff_class: DsotariffClassC,
 
-    #[yaserde(prefix = "cp", rename = "EnergyDirection")]
+    #[yaserde(prefix = "ns0", rename = "EnergyDirection")]
     pub energy_direction: EnergyDirection,
 
-    #[yaserde(prefix = "cp", rename = "EnergyCommunity")]
+    #[yaserde(prefix = "ns0", rename = "EnergyCommunity")]
     pub energy_community: EnergyCommunityC,
 
-    #[yaserde(prefix = "cp", rename = "TypeOfGeneration")]
+    #[yaserde(prefix = "ns0", rename = "TypeOfGeneration")]
     pub type_of_generation: TypeOfGenerationC,
 
-    #[yaserde(prefix = "cp", rename = "ShortageCapacity")]
+    #[yaserde(prefix = "ns0", rename = "ShortageCapacity")]
     pub shortage_capacity: Option<ShortageCapacityC>,
 
-    #[yaserde(prefix = "cp", rename = "ForecastConsumption")]
+    #[yaserde(prefix = "ns0", rename = "ForecastConsumption")]
     pub forecast_consumption: ForecastConsumption,
 
-    #[yaserde(prefix = "cp", rename = "SupplyOfLastResort")]
+    #[yaserde(prefix = "ns0", rename = "SupplyOfLastResort")]
     pub supply_of_last_resort: SupplyOfLastResort,
 
-    #[yaserde(prefix = "cp", rename = "LoadProfileType")]
+    #[yaserde(prefix = "ns0", rename = "LoadProfileType")]
     pub load_profile_type: LoadProfileTypeC,
 
-    #[yaserde(prefix = "cp", rename = "MeteringPointDataChoice")]
+    #[yaserde(prefix = "ns0", rename = "MeteringPointDataChoice")]
     pub metering_point_data_choice: metering_point_data::MeteringPointDataChoice,
 }
 
@@ -427,7 +428,7 @@ impl Validate for MeteringPointData {}
 pub mod metering_point_data {
     use super::*;
     
-    #[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+    #[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 
     pub enum MeteringPointDataChoice {
         ElectricitySpecificData(Option<ElectricitySpecificData>),
@@ -447,7 +448,7 @@ pub mod metering_point_data {
 }
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct DsotariffClassC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -458,18 +459,18 @@ impl Validate for DsotariffClassC {}
 
 // Daten einer Energiegemeinschaft
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct Ecdata {
     // Energiegemeinschafts-ID
-    #[yaserde(prefix = "cp", rename = "ECID")]
-    pub ecid: ct::MeteringPoint,
+    #[yaserde(prefix = "ns0", rename = "ECID")]
+    pub ecid: ns1::MeteringPoint,
 
     // Verteilungsmodell
-    #[yaserde(prefix = "cp", rename = "ECPartitionModell")]
+    #[yaserde(prefix = "ns0", rename = "ECPartitionModell")]
     pub ec_partition_modell: PartitionModell,
 
     // Anteil bei statischem Modell von Energiegemeinschaften in Prozent
-    #[yaserde(prefix = "cp", rename = "ECShare")]
+    #[yaserde(prefix = "ns0", rename = "ECShare")]
     pub ec_share: Option<Ecshare>,
 }
 
@@ -477,7 +478,7 @@ impl Validate for Ecdata {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct EnergyCommunityC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -487,7 +488,7 @@ impl Validate for EnergyCommunityC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct Months0C {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -497,7 +498,7 @@ impl Validate for Months0C {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct NameC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -507,7 +508,7 @@ impl Validate for NameC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct PeakPowerC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -517,7 +518,7 @@ impl Validate for PeakPowerC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct PoboxNoC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -527,7 +528,7 @@ impl Validate for PoboxNoC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct ShortageCapacityC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -537,7 +538,7 @@ impl Validate for ShortageCapacityC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct StaircaseC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -547,7 +548,7 @@ impl Validate for StaircaseC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct StreetC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -557,7 +558,7 @@ impl Validate for StreetC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct StreetNoC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -567,7 +568,7 @@ impl Validate for StreetNoC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct TransmissionCycleC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -577,7 +578,7 @@ impl Validate for TransmissionCycleC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct TypeOfGenerationC {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -587,7 +588,7 @@ impl Validate for TypeOfGenerationC {}
 
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
-#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 pub struct Zipc {
     #[yaserde(attribute, rename = "Changed")]
     pub changed: bool,
@@ -597,7 +598,7 @@ impl Validate for Zipc {}
 
 
 // Abschlagszyklus
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 
 pub enum BudgetBillingCycle {
     #[yaserde(rename = "00")]
@@ -660,7 +661,7 @@ impl Validate for CompanyRegistryNo {
 }
 
 // Abrechnungszyklus
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 
 pub enum ConsumptionBillingCycle {
     #[yaserde(rename = "01")]
@@ -737,7 +738,7 @@ impl Validate for DeviceNumber {
 }
 
 // Zählertyp
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 
 pub enum DeviceType {
     #[yaserde(rename = "NONSMART")]
@@ -784,7 +785,7 @@ impl Validate for DoorNumber {
 }
 
 // Tarifklasse Netzbetreiber (lt. SNVo)
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 
 pub enum DsotariffClass {
     G,
@@ -864,7 +865,7 @@ pub struct EnergyCommunity (pub String);
 
 impl Validate for EnergyCommunity {}
 // Energierichtung (Erzeuger/Verbraucher)
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 
 pub enum EnergyDirection {
     #[yaserde(rename = "CONSUMPTION")]
@@ -922,7 +923,7 @@ impl Validate for GasGridLevel {
 }
 
 // Netzrechnung an
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 
 pub enum GridInvoiceRecipient {
     #[yaserde(rename = "CUSTOMER")]
@@ -1007,7 +1008,7 @@ impl Validate for Name {
 }
 
 // Teilnahmemodell
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 
 pub enum PartitionModell {
     #[yaserde(rename = "DYNAMIC")]
@@ -1125,7 +1126,7 @@ pub struct SupplyOfLastResort (pub bool);
 
 impl Validate for SupplyOfLastResort {}
 // Versorgungsstatus
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 
 pub enum SupStatus {
     #[yaserde(rename = "ON")]
@@ -1146,7 +1147,7 @@ impl Validate for SupStatus {}
 
 
 // Übertragungsintervall Verbrauchsdaten
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 
 pub enum TransmissionCycle {
     D,
@@ -1165,7 +1166,7 @@ impl Validate for TransmissionCycle {}
 
 
 // Voll-/Überschusseinspeiser
-#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "cp", namespace = "cp: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
+#[derive(PartialEq, Debug, YaSerialize, YaDeserialize)]#[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31")]
 
 pub enum TypeOfGeneration {
     #[yaserde(rename = "NONE")]
@@ -1238,4 +1239,26 @@ pub fn read_masterdata_01p31(file_read : &Path) -> Option<MasterData>{
     return Some(_data)
   }
   None
+}
+pub fn write_masterdata_01p31(file_write : &Path, data :&MasterData) -> Result<(),String>
+{
+ 
+    if let Ok(src_file) = File::create(file_write) {  
+    let config: Config = Config {
+        perform_indent: true,
+        write_document_declaration: true,
+        indent_string: None,
+    };        
+    if let Ok(mut content) = yaserde::ser::to_string_with_config(data, &config) {
+    content = content.replace("xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31","xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/masterdata/01p31xmlns:ns1=\"http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20\""); 
+        let mut bw = BufWriter::new(src_file);
+        if let Ok(_write_ok) = bw.write_all(content.as_bytes()) {
+            return Ok(());
+        }
+    }        
+    return Err("error serialize content".to_string());
+}
+Err("can't create file".to_string())
+
+
 }

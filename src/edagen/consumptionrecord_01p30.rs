@@ -30,7 +30,19 @@ impl Validate for ConsumptionRecord {}
 
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
 #[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/consumptionrecord/01p30")]
-pub struct MarketParticipantDirectory {
+pub struct MarketParticipantDirectory {    
+    #[yaserde(prefix = "ns1", rename = "RoutingHeader")]
+    pub routing_header: ns1::RoutingHeader,
+
+    #[yaserde(prefix = "ns1", rename = "Sector")]
+    pub sector: ns1::Sector,
+
+    #[yaserde(attribute, rename = "DocumentMode")]
+    pub document_mode: ns1::DocumentMode,
+
+    #[yaserde(attribute, rename = "Duplicate")]
+    pub duplicate: bool,
+    
     // DATEN_CRMSG
     #[yaserde(prefix = "ns0", rename = "MessageCode")]
     pub message_code: market_participant_directory::MessageCodeType,
@@ -57,6 +69,18 @@ pub struct ProcessDirectory {
     // Lieferanschrift (EC-Nummer)
     #[yaserde(prefix = "ns0", rename = "DeliveryPoint")]
     pub delivery_point: Option<ns1::MessageAddress>,
+
+    #[yaserde(prefix = "ns1", rename = "MessageId")]
+    pub message_id: ns1::GroupingId,
+
+    #[yaserde(prefix = "ns1", rename = "ConversationId")]
+    pub conversation_id: ns1::GroupingId,
+
+    #[yaserde(prefix = "ns1", rename = "ProcessDate")]
+    pub process_date: xs::Date,
+
+    #[yaserde(prefix = "ns1", rename = "MeteringPoint")]
+    pub metering_point: ns1::MeteringPoint,
 
     #[yaserde(prefix = "ns0", rename = "Energy")]
     pub energy: Vec<Energy>,

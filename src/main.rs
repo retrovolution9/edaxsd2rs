@@ -93,6 +93,10 @@ fn main() {
     if *m.get_one::<bool>("identify").unwrap() {
         cmd_v.push(EMode::IDENTIFY)
     }
+
+    if *m.get_one::<bool>("test").unwrap() {
+        cmd_v.push(EMode::TESTREADWRITE)
+    }
     
     if let Some(folder) = m.get_one::<PathBuf>("folder")
     {
@@ -161,7 +165,7 @@ fn process_single_file(mode: &EMode, input_path: &Path, output_path: Option<&str
             },
             EMode::TESTREADWRITE => {  
                 // convert only xsd files 
-                if ext == "xsd" {
+                if ext == "xml" {
                     println!("test_readwrite {}", input_path.as_os_str().to_string_lossy());
                     test_readwrite_eda_file(&input_path);
                 }

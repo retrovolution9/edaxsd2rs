@@ -161,7 +161,7 @@ pub fn print_eda_identity( edatyp: &EdaRecordTyp, file_path: &Path)
 
 
 // 
-// Rename EDA xml files
+// Testing EDA xml files
 //
 pub fn test_readwrite_eda_file(file_path:&Path)
 {

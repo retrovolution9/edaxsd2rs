@@ -96,8 +96,11 @@ pub fn create_rs_from_schema(input_path: &Path, output_path: Option<&str>)
                     
                     let content_path = function_name.to_lowercase().replace("_", "/");
                     let content_search : String = r#"xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/"#.to_string() + content_path.as_str();
-                    let content_replace = content_search.clone() + r#"xmlns:ns1=\"http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20\""#;
-                    let content_replace_code = format!("    content = content.replace(\"{}\",\"{}\"); ", &content_search, content_replace);
+                    let content_replace = content_search.clone() + r#"\" xmlns:ns1=\"http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20"#;
+                    let content_replace_code = format!("    content = content.replace(\"{}\",\"{}\"); ", 
+                        &content_search, 
+                        content_replace
+                    );
                     
                     code = code + &format!("\npub fn write_{}(file_write : &Path, data :&{}) -> Result<(),String>\n{{\n", 
                         function_name,

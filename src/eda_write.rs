@@ -17,7 +17,7 @@ use super::eda_typ::{ EdaRecordTyp ,
   write_ecmplist_01p00,
   read_masterdata_01p31,
   read_message_01p10,
-  MessageAddress_01p20,AddressType_01p20,Sector_01p20
+  MessageAddress_01p20,AddressType_01p20,Sector_01p20,DocumentMode_01p20
 };
 
 pub fn eda_write_default( process : &Option<&String>)
@@ -32,6 +32,8 @@ pub fn eda_write_default( process : &Option<&String>)
               print!( "prepare for write EC_PODLIST: ");
               {
                 let mut d1 : Cprequest_1p12 = Default::default();
+                d1.market_participant_directory.document_mode = DocumentMode_01p20::Prod; // bei Test : DocumentMode_01p20::Simu
+                d1.market_participant_directory.schema_version = "01p20".to_string();
                 d1.market_participant_directory.message_code.0 = "ANFORDERUNG_ECP".to_string();
                 d1.market_participant_directory.routing_header.sender.address_type = AddressType_01p20::Ecnumber;
                 d1.market_participant_directory.routing_header.sender.message_address.0 = "RC100300".to_string();

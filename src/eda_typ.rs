@@ -11,7 +11,8 @@ pub use super::edagen::message_01p10::{Message as Message_1p10, read_message_01p
 pub use super::edagen::cpcommontypes_01p20::{  
   MessageAddress as MessageAddress_01p20, 
   AddressType as AddressType_01p20, 
-  Sector as Sector_01p20
+  Sector as Sector_01p20,
+  DocumentMode as DocumentMode_01p20,
 };
 
 

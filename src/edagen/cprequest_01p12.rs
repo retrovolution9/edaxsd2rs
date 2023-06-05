@@ -280,7 +280,7 @@ pub fn write_cprequest_01p12(file_write : &Path, data :&Cprequest) -> Result<(),
         indent_string: None,
     };        
     if let Ok(mut content) = yaserde::ser::to_string_with_config(data, &config) {
-    content = content.replace("xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12","xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12xmlns:ns1=\"http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20\""); 
+    content = content.replace("xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12"," xmlns:ns0=\"http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12\" xmlns:ns1=\"http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20"); 
         let mut bw = BufWriter::new(src_file);
         if let Ok(_write_ok) = bw.write_all(content.as_bytes()) {
             return Ok(());

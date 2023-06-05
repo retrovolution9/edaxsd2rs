@@ -30,7 +30,7 @@
 			<xsd:element name="GridInvoiceRecipient" type="cp:GridInvoiceRecipient" minOccurs="0"/>
 			<xsd:element name="ConsumptionBillingCycle" type="cp:ConsumptionBillingCycle" minOccurs="0"/>
 			<xsd:element name="TransmissionCycle" type="cp:TransmissionCycle" minOccurs="0"/>
-	h		<xsd:element name="MeteringIntervall" type="cp:MeteringIntervall" minOccurs="0"/>
+			<xsd:element name="MeteringIntervall" type="cp:MeteringIntervall" minOccurs="0"/>
 			<xsd:element name="LoadProfileType" type="cp:LoadProfileType" minOccurs="0"/>
 			<xsd:element name="DateTimeFrom" type="ct:DateTimeU" minOccurs="0"/>
 			<xsd:element name="DateTimeTo" type="ct:DateTimeU" minOccurs="0"/>

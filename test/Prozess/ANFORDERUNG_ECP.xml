@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ns2:CPRequest xmlns:ns2="http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12" xmlns="http://www.ebutilities.at/schemata/customerprocesses/common/types/01p20">
+        
+    <ns2:MarketParticipantDirectory DocumentMode="PROD" Duplicate="false" SchemaVersion="01.12">
+                
+        <RoutingHeader>
+                        
+            <Sender AddressType="ECNumber">
+                                
+                <MessageAddress>RC100300</MessageAddress>
+                            
+            </Sender>
+                        
+            <Receiver AddressType="ECNumber">
+                                
+                <MessageAddress>AT008000</MessageAddress>
+                            
+            </Receiver>
+                        
+            <DocumentCreationDateTime>2023-06-01T16:44:05</DocumentCreationDateTime>
+                    
+        </RoutingHeader>
+                
+        <Sector>01</Sector>
+                
+        <ns2:MessageCode>ANFORDERUNG_ECP</ns2:MessageCode>
+            
+    </ns2:MarketParticipantDirectory>
+        
+    <ns2:ProcessDirectory>
+                
+        <MessageId>RC100300202306011444050620000001806</MessageId>
+                
+        <ConversationId>AT008000202306011444047420000001805</ConversationId>
+                
+        <ProcessDate>2023-06-01</ProcessDate>
+                
+        <MeteringPoint>AT00800000000RC100300000000000108</MeteringPoint>
+                
+        <ns2:Extension>
+                        
+            <ns2:AssumptionOfCosts>false</ns2:AssumptionOfCosts>
+                    
+        </ns2:Extension>
+            
+    </ns2:ProcessDirectory>
+    
+</ns2:CPRequest>

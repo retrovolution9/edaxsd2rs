@@ -69,6 +69,18 @@ impl Validate for Extension {}
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
 #[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
 pub struct MarketParticipantDirectory {
+    #[yaserde(prefix = "ns1", rename = "RoutingHeader")]
+    pub routing_header: ns1::RoutingHeader,
+
+    #[yaserde(prefix = "ns1", rename = "Sector")]
+    pub sector: ns1::Sector,
+
+    #[yaserde(attribute, rename = "DocumentMode")]
+    pub document_mode: ns1::DocumentMode,
+
+    #[yaserde(attribute, rename = "Duplicate")]
+    pub duplicate: bool,
+    
     #[yaserde(prefix = "ns0", rename = "MessageCode")]
     pub message_code: ns1::MessageCode,
 
@@ -82,6 +94,18 @@ impl Validate for MarketParticipantDirectory {}
 #[derive(Default, PartialEq, Debug, YaSerialize, YaDeserialize)]
 #[yaserde(prefix = "ns0", namespace = "ns0: http://www.ebutilities.at/schemata/customerprocesses/cprequest/01p12")]
 pub struct ProcessDirectory {
+    #[yaserde(prefix = "ns1", rename = "MessageId")]
+    pub message_id: ns1::GroupingId,
+
+    #[yaserde(prefix = "ns1", rename = "ConversationId")]
+    pub conversation_id: ns1::GroupingId,
+
+    #[yaserde(prefix = "ns1", rename = "ProcessDate")]
+    pub process_date: xs::Date,
+
+    #[yaserde(prefix = "ns1", rename = "MeteringPoint")]
+    pub metering_point: ns1::MeteringPoint,
+
     #[yaserde(prefix = "ns0", rename = "Extension")]
     pub extension: Option<Extension>,
 

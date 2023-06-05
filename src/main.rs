@@ -1,5 +1,4 @@
 use clap::{Arg, Command, ArgAction, ValueHint, value_parser};
-use eda_info::EdaRecordTyp;
 
 use std::fs::{self};
 use std::path::{Path, PathBuf};
@@ -11,6 +10,11 @@ mod edagen;
 mod eda_info;
 mod eda_convert;
 use eda_convert::create_rs_from_schema;
+mod eda_typ;
+use eda_typ::{EdaRecordTyp};
+mod eda_write;
+use eda_write::{eda_write_default};
+
 
 #[macro_use]
 extern crate yaserde_derive;
@@ -19,7 +23,7 @@ enum EMode {
     CONVERT,
     RENAME,
     IDENTIFY,
-    TESTREADWRITE,
+    TESTREADWRITE
 }
 
 fn main() {
@@ -49,6 +53,15 @@ fn main() {
         .action(ArgAction::SetTrue)
         .help("identify eda xml file(s)")
     )
+    .arg(
+        Arg::new("write")
+        .long("write")
+        .short('w')
+        .required(false)
+        .value_names(["EC_PODLIST"])
+        .help("default write eda xml file(s)")
+    )
+    
     .arg(
         Arg::new("test")
         .long("test")
@@ -96,6 +109,11 @@ fn main() {
 
     if *m.get_one::<bool>("test").unwrap() {
         cmd_v.push(EMode::TESTREADWRITE)
+    }
+
+    let process_cmd = m.get_one::<String>("write");
+    if process_cmd.is_some() {
+        eda_write_default(&process_cmd);
     }
     
     if let Some(folder) = m.get_one::<PathBuf>("folder")

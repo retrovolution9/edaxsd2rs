@@ -6,9 +6,9 @@ use xsd_parser::generator::builder::GeneratorBuilder;
 use xsd_parser::parser::parse;
 use std::io::{prelude::*};
 
+use super::eda_typ::{EdaRecordTyp};
 use crate::eda_info;
-
-use super::eda_info::{EdaRecordTyp,get_eda_info, test_readwrite};
+use super::eda_info::{get_eda_info, test_readwrite};
 use super::eda_convert::create_rs_from_schema;
 
 // 
